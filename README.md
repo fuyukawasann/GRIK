@@ -2,7 +2,7 @@
 Hanyang University Graduation Project in 2024.
 
 ## License
-"This project is licensed under the terms of the GNU GPT License."
+"This project is licensed under the terms of the GNU GPL-3.0 License."
 Please make sure this license when you fork our project.
 
 ## Goal of our project
