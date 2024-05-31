@@ -13,9 +13,9 @@ import subprocess
 try:
 	import wget
 except:
-    # pip 모듈 업그레이드
+    # Upgrade pip module
     subprocess.check_call([sys.executable,'-m', 'pip', 'install', '--upgrade', 'pip'])
-    # 에러 발생한 모듈 설치
+    # Install wget module
     subprocess.check_call([sys.executable,'-m', 'pip', 'install', '--upgrade', 'wget'])
     import wget
 
