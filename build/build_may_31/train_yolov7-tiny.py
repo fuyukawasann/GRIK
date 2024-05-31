@@ -87,18 +87,38 @@ def download_weight_file(sel_model):
 
 ## 8-1. Training Model(macOS)
 def train_model_mac(sel_model):
-    if(sel_model == '1'):
-        print("Training the yolov7 model...")
-        if(torch.backends.mps.is_available()):
-            os.system("python train.py --workers 1 --device mps --batch-size 8 --epochs 100 --img 640 640 --data data/GRIKDataset/data.yaml --hyp data/hyp.scratch.custom.yaml --cfg cfg/training/yolov7-custom.yaml --name yolov7-custom --weights yolov7.pt --freeze 50")
+    while 1:
+        mysel = input("Do you want to freeze? 1: Yes 2: No >>")
+        if(mysel == '1' or mysel == '2'):
+            break
+    ## Freeze
+    if(mysel == '1'):
+        if(sel_model == '1'):
+            print("Training the yolov7 model...")
+            if(torch.backends.mps.is_available()):
+                os.system("python train.py --workers 1 --device mps --batch-size 8 --epochs 100 --img 640 640 --data data/GRIKDataset/data.yaml --hyp data/hyp.scratch.custom.yaml --cfg cfg/training/yolov7-custom.yaml --name yolov7-custom --weights yolov7.pt --freeze 50")
+            else:
+                os.system("python train.py --workers 1 --batch-size 8 --epochs 100 --img 640 640 --data data/GRIKDataset/data.yaml --hyp data/hyp.scratch.custom.yaml --cfg cfg/training/yolov7-custom.yaml --name yolov7-custom --weights yolov7.pt --freeze 50")
         else:
-            os.system("python train.py --workers 1 --batch-size 8 --epochs 100 --img 640 640 --data data/GRIKDataset/data.yaml --hyp data/hyp.scratch.custom.yaml --cfg cfg/training/yolov7-custom.yaml --name yolov7-custom --weights yolov7.pt --freeze 50")
+            print("Training the yolov7-tiny model...")
+            if(torch.backends.mps.is_available()):
+                os.system("python train.py --workers 1 --device mps --batch-size 8 --epochs 100 --img 640 640 --data data/GRIKDataset/data.yaml --hyp data/hyp.scratch.custom.yaml --cfg cfg/training/yolov7-tiny-custom.yaml --name yolov7-tiny-custom --weights yolov7-tiny.pt --freeze 50")
+            else:
+                os.system("python train.py --workers 1 --batch-size 8 --epochs 100 --img 640 640 --data data/GRIKDataset/data.yaml --hyp data/hyp.scratch.custom.yaml --cfg cfg/training/yolov7-tiny-custom.yaml --name yolov7-tiny-custom --weights yolov7-tiny.pt --freeze 50")
+    ## Not Freeze
     else:
-        print("Training the yolov7-tiny model...")
-        if(torch.backends.mps.is_available()):
-            os.system("python train.py --workers 1 --device mps --batch-size 8 --epochs 100 --img 640 640 --data data/GRIKDataset/data.yaml --hyp data/hyp.scratch.custom.yaml --cfg cfg/training/yolov7-tiny-custom.yaml --name yolov7-tiny-custom --weights yolov7-tiny.pt --freeze 50")
+        if(sel_model == '1'):
+            print("Training the yolov7 model...")
+            if(torch.backends.mps.is_available()):
+                os.system("python train.py --workers 1 --device mps --batch-size 8 --epochs 100 --img 640 640 --data data/GRIKDataset/data.yaml --hyp data/hyp.scratch.custom.yaml --cfg cfg/training/yolov7-custom.yaml --name yolov7-custom --weights yolov7.pt")
+            else:
+                os.system("python train.py --workers 1 --batch-size 8 --epochs 100 --img 640 640 --data data/GRIKDataset/data.yaml --hyp data/hyp.scratch.custom.yaml --cfg cfg/training/yolov7-custom.yaml --name yolov7-custom --weights yolov7.pt")
         else:
-            os.system("python train.py --workers 1 --batch-size 8 --epochs 100 --img 640 640 --data data/GRIKDataset/data.yaml --hyp data/hyp.scratch.custom.yaml --cfg cfg/training/yolov7-tiny-custom.yaml --name yolov7-tiny-custom --weights yolov7-tiny.pt --freeze 50")
+            print("Training the yolov7-tiny model...")
+            if(torch.backends.mps.is_available()):
+                os.system("python train.py --workers 1 --device mps --batch-size 8 --epochs 100 --img 640 640 --data data/GRIKDataset/data.yaml --hyp data/hyp.scratch.custom.yaml --cfg cfg/training/yolov7-tiny-custom.yaml --name yolov7-tiny-custom --weights yolov7-tiny.pt")
+            else:
+                os.system("python train.py --workers 1 --batch-size 8 --epochs 100 --img 640 640 --data data/GRIKDataset/data.yaml --hyp data/hyp.scratch.custom.yaml --cfg cfg/training/yolov7-tiny-custom.yaml --name yolov7-tiny-custom --weights yolov7-tiny.pt")
     print("Training is done.")
 
 ## 8-2. Training Model(Windows or Linux)
