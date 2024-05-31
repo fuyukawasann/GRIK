@@ -28,7 +28,7 @@ def download_yolov7():
 
     # Change the directory
     print("Changing the directory...")
-    os.system("cd yolov7")
+    os.chdir("yolov7")
     print("Directory is changed successfully.")
 
 
@@ -190,24 +190,41 @@ if __name__ == '__main__':
         test_model_mac(select_model)
     else:
         test_model(select_model)
+
     # Copy the result weight file
     print("Copying the result weight file...")
     ## Check the save directory is already exist
     if not os.path.exists("../Training_Files"):
         os.makedirs("../Training_Files")
     ## Copy the weight file
+    myWName = input("Enter file name to save >>")
     if(select_model == '1'):
-        shutil.copyfile("./runs/train/yolov7-custom/weights/best.pt", "../Training_Files/yolov7-custom.pt")
+        shutil.copyfile("./runs/train/yolov7-custom/weights/best.pt", f"../Training_Files/yolov7-custom-{myWName}.pt")
     else:
-        shutil.copyfile("./runs/train/yolov7-tiny-custom/weights/best.pt", "../Training_Files/yolov7-tiny-custom.pt")
+        shutil.copyfile("./runs/train/yolov7-tiny-custom/weights/best.pt", f"../Training_Files/yolov7-tiny-custom-{myWName}.pt")
     print("Weight file is copied successfully.")
+
+    # Copy the result image
+    ## Check the save directory is already exist
+    if not os.path.exists("../Train_Test_Results"):
+        os.makedirs("../Train_Test_Results")
+    ## Copy the result image
+    print("Copying the result image...")
+    myName = input("Enter file name to save >>")
+    shutil.copyfile("./runs/detect/exp/test05.jpg", f"../Train_Test_Results/{myName}.jpg")
+    print("Result image is copied successfully.")
+
     # Delete yolov7 directory
     print("Deleting the yolov7 directory...")
+    ## Change the directory
     print("Current Directory: ", os.getcwd())
     print("Changing the directory...")
-    os.system("cd ..")
+    os.chdir("..")
     print("Directory is changed successfully.")
+    ## Delete the directory
     print("Start deleting the yolov7 directory...")
-    shutil.rmtree("yolov7")
+    os.system("rmdir /s yolov7")
     print("yolov7 directory is deleted successfully.")
+
+    # Finish the program
     print("All processes are done.")
