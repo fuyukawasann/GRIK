@@ -190,5 +190,24 @@ if __name__ == '__main__':
         test_model_mac(select_model)
     else:
         test_model(select_model)
-    
+    # Copy the result weight file
+    print("Copying the result weight file...")
+    ## Check the save directory is already exist
+    if not os.path.exists("../Training_Files"):
+        os.makedirs("../Training_Files")
+    ## Copy the weight file
+    if(select_model == '1'):
+        shutil.copyfile("./runs/train/yolov7-custom/weights/best.pt", "../Training_Files/yolov7-custom.pt")
+    else:
+        shutil.copyfile("./runs/train/yolov7-tiny-custom/weights/best.pt", "../Training_Files/yolov7-tiny-custom.pt")
+    print("Weight file is copied successfully.")
+    # Delete yolov7 directory
+    print("Deleting the yolov7 directory...")
+    print("Current Directory: ", os.getcwd())
+    print("Changing the directory...")
+    os.system("cd ..")
+    print("Directory is changed successfully.")
+    print("Start deleting the yolov7 directory...")
+    shutil.rmtree("yolov7")
+    print("yolov7 directory is deleted successfully.")
     print("All processes are done.")
