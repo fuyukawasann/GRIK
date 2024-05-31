@@ -223,7 +223,10 @@ if __name__ == '__main__':
     print("Directory is changed successfully.")
     ## Delete the directory
     print("Start deleting the yolov7 directory...")
-    os.system("rmdir /s yolov7")
+    if(this_platform == "Windows"):
+        os.system("rmdir /s yolov7")
+    else:
+        os.system("rm -rf yolov7")
     print("yolov7 directory is deleted successfully.")
 
     # Finish the program
