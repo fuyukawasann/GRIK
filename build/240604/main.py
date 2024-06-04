@@ -36,6 +36,7 @@ if __name__ == '__main__':
     time.sleep(1) # wait for 1 seconds
     ### USE Different module depending on the platform
     if(torch.cuda.is_available()):
+        # Use GPU version of the SSIM module
         # print("CUDA is available!!")
         # time.sleep(1) # wait for 1 seconds
         # print("Use the CUDA version of the SSIM module!!")
