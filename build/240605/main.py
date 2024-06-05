@@ -5,16 +5,17 @@
 ##########################################
 
 ########## Change Log ##########
-# Jun 04, 2024 (KST)
-# Add Object Detection Part!!
+# Jun 05, 2024 (KST)
+# Revise delete_bg part to make it more general
 ###############################
 
 ## import the necessary library
 import torch
 import os
-import cv2
+import datetime
 import time
 import platform
+import sys
 
 ## import my own module
 from ssim_cpu import ssim_cpu as scc
@@ -30,6 +31,14 @@ if __name__ == '__main__':
     ## Intro_message
     print("This is the main part of the file")
     time.sleep(2) # wait for 2 seconds
+    
+    ## 0. Get Saved Name
+    res_name = input("Enter the name of the result: ")
+    ### Add the current time to the name
+    res_name = f'{res_name}_{datetime.now().strftime("%Y%m%d%H%M%S")}'
+    ### Inform the user about the name
+    print(f'The name of the result(Include datetime!!): {res_name}')
+    time.sleep(1) # wait for 1 seconds
     
     ## 1. SSIM - Mark the best frame
     ### Inform the user
@@ -80,26 +89,24 @@ if __name__ == '__main__':
     ### Inform the user
     print("Delete Background Part!!")
     time.sleep(1) # wait for 1 seconds
-    ### Get the path of the images
+    # ### Get the path of the images
+    # print(f'Current Directory: {os.getcwd()}')
+    # print(f'Element in the current directory: {os.listdir('Compare')}')
+    # original_img_path = input("Enter the path of the original image: ")
+    # handwritten_img_path = input("Enter the path of the handwritten image: ")
+    ### Check the path of the images and if not exit.
     print(f'Current Directory: {os.getcwd()}')
-    print(f'Element in the current directory: {os.listdir('Compare')}')
-    original_img_path = input("Enter the path of the original image: ")
-    handwritten_img_path = input("Enter the path of the handwritten image: ")
+    extract_folder = f'Result/{res_name}/Extracted' # BBOX Extracted module would make this directory
+    if not os.path.exists(extract_folder):
+        print("There's no extracted folder!! Please check the path!!")
+        sys.exit()
     ### Delete the background
-    del_bg_obj = del_bg(original_img_path, handwritten_img_path)
-    result = del_bg_obj.delete_background()
+    del_bg_obj = del_bg(extract_folder, res_name)
+    result = del_bg_obj.delete_background() # Result is the path of the saved image
     print("End of the module!!")
     time.sleep(1) # wait for 1 seconds
     ### Save the result
-    print("Save the result!!")
-    time.sleep(2) # wait for 2 seconds
-    save_DIR = 'Result'
-    if not os.path.exists(save_DIR):
-        os.makedirs(save_DIR)
-    name = input("Enter the name of the file: ")
-    cv2.imwrite(f'{save_DIR}/{name}.jpg', result)
-    print("Complete to save the result!!")
-    time.sleep(1) # wait for 1 seconds
+    
     
     ## 4. Delete YOLOv7
     ### Inform the user
