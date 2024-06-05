@@ -18,6 +18,7 @@ import platform
 
 ## import my own module
 from ssim_cpu import ssim_cpu as scc
+from ssim_gpu import ssim_gpu as scg
 from delete_bg import delete_bg as del_bg
 from detection import detection_ps as dps
 
@@ -37,16 +38,16 @@ if __name__ == '__main__':
     ### USE Different module depending on the platform
     if(torch.cuda.is_available()):
         # Use GPU version of the SSIM module
-        # print("CUDA is available!!")
-        # time.sleep(1) # wait for 1 seconds
-        # print("Use the CUDA version of the SSIM module!!")
-        # time.sleep(1)
-        # #### Input the path of the video file
-        # print("Current Directory: ", os.getcwd())
-        # video_path = input("Enter the path of the video file: ")
-        # ssim_obj = scc(video_path)
-        # save_img_path = ssim_obj.ssim_cpu_calculation()
-        # print(f'Saved Image Path: {save_img_path}')
+        print("CUDA is available!!")
+        time.sleep(1) # wait for 1 seconds
+        print("Use the CUDA version of the SSIM module!!")
+        time.sleep(1)
+        #### Input the path of the video file
+        print("Current Directory: ", os.getcwd())
+        video_path = input("Enter the path of the video file: ")
+        ssim_obj = scg(video_path)
+        save_img_path = ssim_obj.ssim_gpu_calculation()
+        print(f'Saved Image Path: {save_img_path}')
         print('Saved Complete')
     else:
         print("CUDA is not available!!")
@@ -110,6 +111,7 @@ if __name__ == '__main__':
         os.system('rmdir /s yolov7')
     else:
         os.system('rm -rf yolov7')
+        
     ## EOF
     print("End of the file!!")
   
