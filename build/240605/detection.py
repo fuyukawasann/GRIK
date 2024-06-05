@@ -19,8 +19,9 @@ except ImportError:
 
 
 class detection_ps:
-	def __init__(self, img_path):
+	def __init__(self, img_path, result_name):
 		self.img_path = img_path
+		self.result_name = result_name
         
 	def detection_panseo(self):
 		print("This is the detection_panseo module")
@@ -87,13 +88,15 @@ class detection_ps:
 		list_img = os.listdir(self.img_path)
 		list_img = natsort.natsorted(list_img)
 		print(f'List of images: {list_img}')
-		save_img_path = 'Result_Panseo'
+		save_img_path = f'Result/{self.result_name}/Result_Panseo' # Before, 'Result_Panseo'
 		if not os.path.exists(save_img_path):
 			os.makedirs(save_img_path)
 
 		# Processing the image
 		print("Processing the image")
 		time.sleep(2)
+		## Check the start time
+		strat_time = time.time()
 		for img in list_img:
 			img_name = img.split('.')[0]
 			this_img = cv2.imread(f'{self.img_path}/{img}')
@@ -109,7 +112,10 @@ class detection_ps:
 				cv2.putText(this_img, str(round(confi, 2)), (int(x), int(y)-40), cv2.FONT_HERSHEY_SIMPLEX, 2, (0,0,255), 2)
     
 			cv2.imwrite(f'{save_img_path}/{img_name}_detect.jpg', this_img)
-			
+
+		## Check the end time
+		end_time = time.time()
+		print(f'Running Time: {end_time - strat_time} seconds')
 		print("End of the detection_panseo module")
 		time.sleep(2)
 		return save_img_path

@@ -12,7 +12,7 @@
 ## import the necessary library
 import torch
 import os
-import datetime
+from datetime import datetime
 import time
 import platform
 import sys
@@ -79,7 +79,7 @@ if __name__ == '__main__':
     print("Test detection module!!")
     time.sleep(1) # wait for 1 seconds
     print(f'Current Directory: {os.getcwd()}')
-    detection_obj = dps('Images')
+    detection_obj = dps('Images', res_name) # After, you need to change 'Images' -> Real Image directory
     result_path = detection_obj.detection_panseo()
     print(f'Result path: {result_path}')
     print("End of the module!!")
