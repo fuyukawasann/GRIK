@@ -2,9 +2,16 @@
 # This is a python script that detects the presence of a "panseo" in an image.
 # Input: Directory of the saved image
 # Output: Directory of the saved image with the detected "panseo"
-# Required Library: torch
+# Required Library: torch, time, os, cv2, natsort
 # BUILD: Jun 04, 2024 (KST)
 ########################################
+
+########## CHANGE LOG ##########
+# Jun 05, 2024 (KST)
+# Add checking time system
+# Change saving directory
+###############################
+
 
 # Import the necessary library
 import torch
@@ -115,7 +122,8 @@ class detection_ps:
 
 		## Check the end time
 		end_time = time.time()
-		print(f'Running Time: {end_time - strat_time} seconds')
+		print(f"Running Time: {end_time - strat_time} seconds")
+		time.sleep(1)
 		print("End of the detection_panseo module")
 		time.sleep(2)
 		return save_img_path

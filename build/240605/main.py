@@ -1,12 +1,13 @@
 ########## Project Description ##########
 # This is a python script for our project.
-# Required Library: opencv, torch, skimage, numpy, os
+# Required Library: torch, os, datetime, time, platform, sys and my own modules
 # BUILD: Jun 02, 2024 (KST)
 ##########################################
 
 ########## Change Log ##########
 # Jun 05, 2024 (KST)
 # Revise delete_bg part to make it more general
+# Add name to save PDF File
 ###############################
 
 ## import the necessary library
@@ -107,8 +108,10 @@ if __name__ == '__main__':
     time.sleep(1) # wait for 1 seconds
     ### Save the result
     
+    ## 4. Make PDF File
+    ###
     
-    ## 4. Delete YOLOv7
+    ## 5. Delete YOLOv7
     ### Inform the user
     print("Delete YOLOv7 repository!!")
     time.sleep(1) # wait for 1 seconds

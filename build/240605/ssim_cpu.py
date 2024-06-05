@@ -86,6 +86,8 @@ class ssim_cpu:
         time.sleep(1)
         
         # SSIM
+        ## Check Start Time
+        start_time = time.time()
         ## Define Frame Counter
         frame_counter = 0
         ## Video Processing
@@ -109,7 +111,10 @@ class ssim_cpu:
         
         # Release the video
         cap.release()
-
+        ## Check End Time
+        end_time = time.time()
+        print(f"Running Time: {end_time - start_time} seconds")
+        time.sleep(1)
         # Return the output path
         print("SSIM Calculation is completed!!")
         return output_path

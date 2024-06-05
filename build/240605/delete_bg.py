@@ -2,7 +2,7 @@
 # This is a python script for deleting the background of the handwritten image.
 # Input: Original Image and Handwritten Image
 # Output: Handwritten Image without background
-# Required Library: OpenCV(install required), time(pre-installed)
+# Required Library: cv2, time, natsort, os
 # BUILD: Jun 05, 2024 (KST)
 ##########################################
 
