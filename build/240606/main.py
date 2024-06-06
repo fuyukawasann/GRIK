@@ -20,7 +20,7 @@ import sys
 ## import my own module
 from Utils.ssim_cpu import ssim_cpu as scc
 from Utils.ssim_gpu import ssim_gpu as scg
-from Utils.delete_bg import delete_bg as del_bg
+from Utils.extract import extractor as etr
 from Utils.detection import detection_ps as dps
 
 
@@ -54,7 +54,7 @@ if __name__ == '__main__':
         #### Input the path of the video file
         print("Current Directory: ", os.getcwd())
         video_path = input("Enter the path of the video file: ")
-        ssim_obj = scg(video_path)
+        ssim_obj = scg(video_path, res_name)
         save_img_path, ssim_eval_time = ssim_obj.ssim_gpu_calculation()
         print(f'Saved Image Path: {save_img_path}')
         print('Saved Complete')
@@ -66,7 +66,7 @@ if __name__ == '__main__':
         #### Input the path of the video file
         print("Current Directory: ", os.getcwd())
         video_path = input("Enter the path of the video file: ")
-        ssim_obj = scc(video_path)
+        ssim_obj = scc(video_path, res_name)
         save_img_path, ssim_eval_time = ssim_obj.ssim_cpu_calculation()
         print(f'Saved Image Path: {save_img_path}')
         print('Saved Complete')
@@ -79,7 +79,7 @@ if __name__ == '__main__':
     print("Test detection module!!")
     time.sleep(1) # wait for 1 seconds
     print(f'Current Directory: {os.getcwd()}')
-    detection_obj = dps('Images', res_name) # After, you need to change 'Images' -> Real Image directory
+    detection_obj = dps(save_img_path, res_name) # After, you need to change 'Images' -> Real Image directory
     ob_result_path, ob_eval_time = detection_obj.detection_panseo()
     print(f'Result path: {ob_result_path}')
     print("End of the module!!")
@@ -95,14 +95,14 @@ if __name__ == '__main__':
     # original_img_path = input("Enter the path of the original image: ")
     # handwritten_img_path = input("Enter the path of the handwritten image: ")
     ### Check the path of the images and if not exit.
-    print(f'Current Directory: {os.getcwd()}')
-    extract_folder = f'Result/{res_name}/Extracted' # BBOX Extracted module would make this directory
-    if not os.path.exists(extract_folder):
+    # print(f'Current Directory: {os.getcwd()}')
+    # extract_folder = f'Result/{res_name}/Extracted' # BBOX Extracted module would make this directory
+    if not os.path.exists(ob_result_path):
         print("There's no extracted folder!! Please check the path!!")
         sys.exit()
     ### Delete the background
-    del_bg_obj = del_bg(extract_folder, res_name)
-    db_result_path, db_eval_time = del_bg_obj.delete_background() # Result is the path of the saved image
+    etr_obj = etr(ob_result_path, res_name)
+    etr_result_path, etr_eval_time = etr_obj.extract_handwritten() # Result is the path of the saved image
     print("End of the module!!")
     time.sleep(1) # wait for 1 seconds
     ### Save the result
@@ -117,11 +117,11 @@ if __name__ == '__main__':
     ### Object Detection
     print(f'Object Detection Running Time: {ob_eval_time} seconds')
     ### Delete Background
-    print(f'Delete Background Running Time: {db_eval_time} seconds')
+    print(f'Delete Background Running Time: {etr_eval_time} seconds')
     ### Make PDF File
     
     ### Print Out the Total Running Time
-    total_time = ssim_eval_time + ob_eval_time + db_eval_time
+    total_time = ssim_eval_time + ob_eval_time + etr_eval_time
     print(f'Total Running Time: {total_time} seconds')
     
     ## 6. Delete YOLOv7

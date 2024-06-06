@@ -18,14 +18,14 @@ import natsort
 import os
 
 
-class delete_bg:
+class extractor:
     def __init__(self, extract_image_path, pjt_name):
         # important!! -> input must be the path of the image file
         self.original_img_path = f'{extract_image_path}/original' # Original Image
         self.handwritten_img_path = f'{extract_image_path}/handwritten' # Handwritten Image
         self.pjt_name = pjt_name # Project Name
         
-    def delete_background(self):
+    def extract_handwritten(self):
         # Report Start time to calculate running time
         start_time = time.time()
         
@@ -62,7 +62,7 @@ class delete_bg:
             # 7. Save the result
             print("Save the result!!")
             ## Make the directory to save the result
-            save_DIR = f'Result/{self.pjt_name}/delete_bg'
+            save_DIR = f'Result/{self.pjt_name}/Extracted'
             if not os.path.exists(save_DIR):
                 os.makedirs(save_DIR)
             

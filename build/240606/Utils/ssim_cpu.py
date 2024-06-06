@@ -31,11 +31,12 @@ except:
 
 
 class ssim_cpu:
-    def __init__(self, video_path):
+    def __init__(self, video_path, res_name):
         # important!! -> input must be the path of the video file
         self.video_path = video_path
+        self.res_name = res_name
     
-    def SSIMprocessor(first, second, thisTurn, output_path):
+    def SSIMprocessor(self, first, second, thisTurn, iter, output_path):
         ## Filtered Gray Scale
         grayA = cv2.cvtColor(first, cv2.COLOR_BGR2GRAY)
         grayB = cv2.cvtColor(second, cv2.COLOR_BGR2GRAY)
@@ -46,13 +47,16 @@ class ssim_cpu:
 
         ## If score is greater than 0.87, then delete Primary
         if thisTurn == 1:
-            cv2.imwrite(f'{output_path}/frame{thisTurn - 1}.jpg', first)
-            print(f'#{thisTurn - 1} Frame Saved!!')
+            cv2.imwrite(f'{output_path}/original/{self.res_name}_{iter}.jpg', first)
+            print(f'#{thisTurn - 1} Frame Saved -> {iter}_original')
+            return iter
         if score < 0.87:
-            cv2.imwrite(f'{output_path}/frame{thisTurn - 1}.jpg', first)
-            print(f'#{thisTurn - 1} Frame Saved!!')
-            cv2.imwrite(f'{output_path}/diff{thisTurn}.jpg', second)
-            print(f'#{thisTurn} Frame Saved!!')
+            cv2.imwrite(f'{output_path}/handwritten/{self.res_name}_{iter}.jpg', first)
+            print(f'#{thisTurn - 1} Frame Saved -> {iter}_handwritten')
+            cv2.imwrite(f'{output_path}/original/{self.res_name}_{iter+1}.jpg', second)
+            print(f'#{thisTurn} Frame Saved -> {iter+1}_original')
+            return iter + 1
+        else: return iter
 
     def ssim_cpu_calculation(self):
         # Read the video
@@ -79,7 +83,7 @@ class ssim_cpu:
 
         # Get the output path
         ## Define the output path
-        output_path = 'Extracted_Frames' # for testing
+        output_path = f'Result/{self.res_name}/SSIM' # for testing
         # output_path = 'Images'
         ## Check the output path
         if not os.path.exists(output_path):
@@ -95,6 +99,7 @@ class ssim_cpu:
         start_time = time.time()
         ## Define Frame Counter
         frame_counter = 0
+        iterator = 0
         ## Video Processing
         while(cap.isOpened()):
             ret, frame = cap.read()
@@ -106,12 +111,13 @@ class ssim_cpu:
                 first = frame
             else:
                 second = frame
-                ssim_cpu.SSIMprocessor(first, second, frame_counter, output_path)
+                iterator = ssim_cpu.SSIMprocessor(first, second, frame_counter, iterator, output_path)
                 first = second
             frame_counter += 1
             ### Save the last frame
             if int(cap.get(1)) == frame_count:
-                cv2.imwrite(f'{output_path}/frame{frame_counter}.jpg', frame)
+                cv2.imwrite(f'{output_path}/handwritten/{self.res_name}_{iterator}.jpg', frame)
+                print(f'#{frame_counter} Frame Saved -> {iterator}_handwritten')
                 break
         
         # Release the video

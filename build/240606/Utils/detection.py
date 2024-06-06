@@ -91,37 +91,53 @@ class detection_ps:
 		pretrained_model = pretrained_model.to(device_type)
 
 		# Image Setting and save setting
-		list_img = os.listdir(self.img_path)
-		list_img = natsort.natsorted(list_img)
-		print(f'List of images: {list_img}')
-		save_img_path = f'Result/{self.result_name}/Result_Panseo' # Before, 'Result_Panseo'
+		## Get directory of the handwritten image and original image
+		ori_img_path = f'{self.img_path}/original'
+		hw_img_path = f'{self.img_path}/handwritten'
+		## Get List of the handwritten Image (original image because file name is same)
+		list_hand_img = os.listdir(hw_img_path)
+		list_hand_img = natsort.natsorted(list_hand_img)
+		print(f'List of images: {list_hand_img}')
+		save_img_path = f'Result/{self.result_name}/YOLO' # Before, 'Result_Panseo'
 		if not os.path.exists(save_img_path):
 			os.makedirs(save_img_path)
+			os.makedirs(f'{save_img_path}/original')
+			os.makedirs(f'{save_img_path}/handwritten')
 
 		# Processing the image
 		print("Processing the image")
 		time.sleep(2)
 		## Check the start time
 		strat_time = time.time()
-		for img in list_img:
+		for img in list_hand_img:
 			img_name = img.split('.')[0]
-			this_img = cv2.imread(f'{self.img_path}/{img}')
-			result_temp = pretrained_model(f'{self.img_path}/{img}')
+			original_img = cv2.imread(f'{ori_img_path}/{img}')
+			handwritten_img = cv2.imread(f'{hw_img_path}/{img}')
+			result_temp = pretrained_model(f'{hw_img_path}/{img}')
 			xyxys = result_temp.pandas().xyxy[0].values # When test delete '.values'
 			# print(xyxys)
 			# xyxys = xyxys.values
 			iterate = 0
 			for this_xyxys in xyxys:
 				x, y, x2, y2, confi, cls_num, cls_name = this_xyxys
-				new_img = img[int(y):int(y2), int(x):int(x2)]
-				cv2.imwrite(f'{save_img_path}/{img_name}_detect_{iterate}.jpg', new_img)
+				x = int(x)
+				y = int(y)
+				x2 = int(x2)
+				y2 = int(y2)
+				## Save part of the original image
+				new_ori_img = original_img[y:y2, x:x2]
+				cv2.imwrite(f'{save_img_path}/original/{img_name}_detect_{iterate}.jpg', new_ori_img)
+				## Save part of the handwritten image
+				new_hand_img = handwritten_img[y:y2, x:x2]
+				cv2.imwrite(f'{save_img_path}/handwritten/{img_name}_detect_{iterate}.jpg', new_hand_img)
+
 				iterate = iterate + 1
 				# print(x, type(x))
-				cv2.rectangle(this_img, (int(x), int(y)), (int(x2), int(y2)), (0,0,255), 2)
-				cv2.putText(this_img, cls_name, (int(x), int(y)-5), cv2.FONT_HERSHEY_SIMPLEX, 2, (0,0,255), 2)
-				cv2.putText(this_img, str(round(confi, 2)), (int(x), int(y)-40), cv2.FONT_HERSHEY_SIMPLEX, 2, (0,0,255), 2)
+				cv2.rectangle(handwritten_img, (x, y), (x2, x2), (0,0,255), 2)
+				cv2.putText(handwritten_img, cls_name, (x, y-5), cv2.FONT_HERSHEY_SIMPLEX, 2, (0,0,255), 2)
+				cv2.putText(handwritten_img, str(round(confi, 2)), (x, y-40), cv2.FONT_HERSHEY_SIMPLEX, 2, (0,0,255), 2)
     
-			cv2.imwrite(f'{save_img_path}/{img_name}_detect.jpg', this_img)
+			cv2.imwrite(f'{save_img_path}/{img_name}_detect.jpg', handwritten_img)
 
 		## Check the end time
 		end_time = time.time()

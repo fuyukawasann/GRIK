@@ -14,7 +14,7 @@ if __name__ == '__main__':
     res_name = input("Enter the name of the result: ")
     print(f'Current Directory: {os.getcwd()}')
     # img_path = input("Enter the path of the image: ")
-    detection_obj = dps('Images', res_name)
+    detection_obj = dps(f'Result/{res_name}/SSIM', res_name)
     result_path, db_eval_time = detection_obj.detection_panseo()
     print(f'Result path: {result_path}')
     print(f'Evaluation time: {db_eval_time}')
