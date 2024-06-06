@@ -18,10 +18,10 @@ import platform
 import sys
 
 ## import my own module
-from ssim_cpu import ssim_cpu as scc
-from ssim_gpu import ssim_gpu as scg
-from delete_bg import delete_bg as del_bg
-from detection import detection_ps as dps
+from Utils.ssim_cpu import ssim_cpu as scc
+from Utils.ssim_gpu import ssim_gpu as scg
+from Utils.delete_bg import delete_bg as del_bg
+from Utils.detection import detection_ps as dps
 
 
 

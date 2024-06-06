@@ -2,7 +2,7 @@
 import os
 import time
 
-from detection import detection_ps as dps
+from Utils.detection import detection_ps as dps
 
 if __name__ == '__main__':
     print("This is the main part of the file")
