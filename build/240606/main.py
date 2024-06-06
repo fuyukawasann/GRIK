@@ -5,9 +5,8 @@
 ##########################################
 
 ########## Change Log ##########
-# Jun 05, 2024 (KST)
-# Revise delete_bg part to make it more general
-# Add name to save PDF File
+# Jun 06, 2024 (KST)
+# Add the code that comparing running time of each sections
 ###############################
 
 ## import the necessary library
@@ -56,7 +55,7 @@ if __name__ == '__main__':
         print("Current Directory: ", os.getcwd())
         video_path = input("Enter the path of the video file: ")
         ssim_obj = scg(video_path)
-        save_img_path = ssim_obj.ssim_gpu_calculation()
+        save_img_path, ssim_eval_time = ssim_obj.ssim_gpu_calculation()
         print(f'Saved Image Path: {save_img_path}')
         print('Saved Complete')
     else:
@@ -68,7 +67,7 @@ if __name__ == '__main__':
         print("Current Directory: ", os.getcwd())
         video_path = input("Enter the path of the video file: ")
         ssim_obj = scc(video_path)
-        save_img_path = ssim_obj.ssim_cpu_calculation()
+        save_img_path, ssim_eval_time = ssim_obj.ssim_cpu_calculation()
         print(f'Saved Image Path: {save_img_path}')
         print('Saved Complete')
 
@@ -81,8 +80,8 @@ if __name__ == '__main__':
     time.sleep(1) # wait for 1 seconds
     print(f'Current Directory: {os.getcwd()}')
     detection_obj = dps('Images', res_name) # After, you need to change 'Images' -> Real Image directory
-    result_path = detection_obj.detection_panseo()
-    print(f'Result path: {result_path}')
+    ob_result_path, ob_eval_time = detection_obj.detection_panseo()
+    print(f'Result path: {ob_result_path}')
     print("End of the module!!")
     time.sleep(1) # wait for 1 seconds
 
@@ -103,7 +102,7 @@ if __name__ == '__main__':
         sys.exit()
     ### Delete the background
     del_bg_obj = del_bg(extract_folder, res_name)
-    result = del_bg_obj.delete_background() # Result is the path of the saved image
+    db_result_path, db_eval_time = del_bg_obj.delete_background() # Result is the path of the saved image
     print("End of the module!!")
     time.sleep(1) # wait for 1 seconds
     ### Save the result
@@ -111,7 +110,21 @@ if __name__ == '__main__':
     ## 4. Make PDF File
     ###
     
-    ## 5. Delete YOLOv7
+    
+    ## 5. Print Out the Running Time
+    ### SSIM
+    print(f'SSIM Running Time: {ssim_eval_time} seconds')
+    ### Object Detection
+    print(f'Object Detection Running Time: {ob_eval_time} seconds')
+    ### Delete Background
+    print(f'Delete Background Running Time: {db_eval_time} seconds')
+    ### Make PDF File
+    
+    ### Print Out the Total Running Time
+    total_time = ssim_eval_time + ob_eval_time + db_eval_time
+    print(f'Total Running Time: {total_time} seconds')
+    
+    ## 6. Delete YOLOv7
     ### Inform the user
     print("Delete YOLOv7 repository!!")
     time.sleep(1) # wait for 1 seconds

@@ -6,6 +6,12 @@
 # BUILD: Jun 05, 2024 (KST)
 ##########################################
 
+########## Change Log ##########
+# Jun 06, 2024 (KST)
+# Add the code that comparing running time of each sections
+# Add cpp code that using CUDA for SSIM calculation and import that file
+###############################
+
 # import the necessary library
 import sys
 import os

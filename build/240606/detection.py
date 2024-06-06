@@ -7,9 +7,8 @@
 ########################################
 
 ########## CHANGE LOG ##########
-# Jun 05, 2024 (KST)
-# Add checking time system
-# Change saving directory
+# Jun 06, 2024 (KST)
+# Add the code that comparing running time of each sections
 ###############################
 
 
@@ -122,10 +121,11 @@ class detection_ps:
 
 		## Check the end time
 		end_time = time.time()
-		print(f"Running Time: {end_time - strat_time} seconds")
+		eval_time = end_time - strat_time
+		print(f"Running Time: {eval_time} seconds")
 		time.sleep(1)
 		print("End of the detection_panseo module")
 		time.sleep(2)
-		return save_img_path
+		return save_img_path, eval_time
 
 

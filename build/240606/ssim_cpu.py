@@ -6,6 +6,11 @@
 # BUILD: Jun 04, 2024 (KST)
 ##########################################
 
+########## Change Log ##########
+# Jun 06, 2024 (KST)
+# Add the code that comparing running time of each sections
+###############################
+
 # import the necessary library
 import sys
 import os
@@ -113,8 +118,9 @@ class ssim_cpu:
         cap.release()
         ## Check End Time
         end_time = time.time()
-        print(f"Running Time: {end_time - start_time} seconds")
+        eval_time = end_time - start_time
+        print(f"Running Time: {eval_time} seconds")
         time.sleep(1)
         # Return the output path
         print("SSIM Calculation is completed!!")
-        return output_path
+        return output_path, eval_time

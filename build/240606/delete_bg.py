@@ -7,10 +7,8 @@
 ##########################################
 
 ########## CHANGELOG ##########
-# Jun 05, 2024 (KST)
-# Delete unnecessary libraries
-# Add time library to check the running time
-# Revise the code more general
+# Jun 06, 2024 (KST)
+# Add the code that comparing running time of each sections
 ##############################
 
 # Import the necessary library
@@ -74,6 +72,7 @@ class delete_bg:
         
         # Report End time to calculate running time
         end_time = time.time()
-        print(f"Running Time: {end_time - start_time} seconds")
+        eval_time = end_time - start_time
+        print(f"Running Time: {eval_time} seconds")
         # return the value
-        return save_DIR
+        return save_DIR, eval_time
