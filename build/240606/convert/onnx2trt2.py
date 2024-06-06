@@ -1,7 +1,29 @@
-import onnx_graphsurgeon as gs
+import onnx
 import tensorrt as trt
 
-onnx_model = gs.import_onnx(onnx.load("Weights/best_tiny_400_16.pt"))
+# 1. onnx 모델 로드
+onnx_model = onnx.load("../Weights/best_tiny_400_16.onnx")
 
-create_attrs = lambda: [
+# 2. TensorRT 엔진 생성
+TRT_LOGGER = trt.Logger(trt.Logger.WARNING)
+trt.init_libnvinfer_plugins(TRT_LOGGER, "")
+
+PLUGIN_CREATORS = trt.get_plugin_registry().plugin_creator_list
+
+with trt.Builder(TRT_LOGGER) as builder, builder.create_network(1) as network, trt.OnnxParser(network, TRT_LOGGER) as parser:
+    # 3. BatchedNMSPlugin 등록
+    parser.register_plugin_creator(PLUGIN_CREATORS[0], "BatchedNMSDynamic_TRT")
     
+    # 4. onnx 모델 파싱
+    parser.parse_from_file("../Weights/best_tiny_400_16.onnx")
+
+    # 5. 엔진 빌드 설정
+    builder.max_workspace_size = 1 << 30 # 1GB
+    builder.max_batch_size = 1
+    builder.fp16_mode = True # FP16 모드 활성화
+
+    # 6. TensorRT 엔진 빌드 및 직렬화
+    engine = builder.build_cuda_engine(network)
+    buf = engine.serialize()
+    with open("../Weights/yolov7.trt", "wb") as f:
+        f.write(buf)
