@@ -110,8 +110,12 @@ class detection_ps:
 			xyxys = result_temp.pandas().xyxy[0].values # When test delete '.values'
 			# print(xyxys)
 			# xyxys = xyxys.values
+			iterate = 0
 			for this_xyxys in xyxys:
 				x, y, x2, y2, confi, cls_num, cls_name = this_xyxys
+				new_img = img[int(y):int(y2), int(x):int(x2)]
+				cv2.imwrite(f'{save_img_path}/{img_name}_detect_{iterate}.jpg', new_img)
+				iterate = iterate + 1
 				# print(x, type(x))
 				cv2.rectangle(this_img, (int(x), int(y)), (int(x2), int(y2)), (0,0,255), 2)
 				cv2.putText(this_img, cls_name, (int(x), int(y)-5), cv2.FONT_HERSHEY_SIMPLEX, 2, (0,0,255), 2)

@@ -9,10 +9,20 @@ TRT_LOGGER = trt.Logger(trt.Logger.WARNING)
 trt.init_libnvinfer_plugins(TRT_LOGGER, "")
 
 PLUGIN_CREATORS = trt.get_plugin_registry().plugin_creator_list
+PLUGIN_REGISTRY = trt.get_plugin_registry()
+
+batchedNMSPlugin = None
+for creator in PLUGIN_CREATORS:
+    if creator.name == "BatchedNMSDynamic_TRT":
+        batchedNMSPlugin = creator
+        break
+
+if batchedNMSPlugin is None:
+    raise RuntimeError("BatchedNMSDynamic_TRT plugin not found")
+
+PLUGIN_REGISTRY.register_creator(batchedNMSPlugin, "BatchedNMSDynamic_TRT")
 
 with trt.Builder(TRT_LOGGER) as builder, builder.create_network(1) as network, trt.OnnxParser(network, TRT_LOGGER) as parser:
-    # 3. BatchedNMSPlugin 등록
-    parser.register_plugin_creator(PLUGIN_CREATORS[0], "BatchedNMSDynamic_TRT")
     
     # 4. onnx 모델 파싱
     parser.parse_from_file("../Weights/best_tiny_400_16.onnx")
