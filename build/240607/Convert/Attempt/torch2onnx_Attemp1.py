@@ -27,7 +27,7 @@ model.to(device)
 
 print("Now coverting torch2onnx in cuda mode ...")
 start_time = time.time()
-torch.onnx.export(model, dummy_input, onnx_model_path, opset_version=11, input_names=['input'], output_names=['output'])
+torch.onnx.export(model, dummy_input, onnx_model_path, opset_version=11)
 end_time = time.time()
 eval_time = end_time - start_time
 

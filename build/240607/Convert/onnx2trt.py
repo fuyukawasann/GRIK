@@ -38,13 +38,13 @@ if builder.platform_has_fast_fp16:
     print("FP16 Quantization is POSSIBLE")
     config.set_flag(trt.BuilderFlag.FP16)
 else:
-    print("FP16 Quantization is IMPOSSIBLE")
+    print("FP16 Quantizationb is IMPOSSIBLE")
 
 network.mark_output(network.get_layer(network.num_layers - 1).get_output(0))
-engine = builder.build_engine(network, config)
+serialized_engine = builder.build_serialized_network(network, config)
 print("Build TRT Engine... Done!")
 print("SAVE Engine...")
 ENGINE_PATH = "../Weights/best_tiny_400_16.trt"
 with open(ENGINE_PATH, "wb") as f:
-    f.write(engine.serialize())
+    f.write(serialized_engine)
 print("SAVE Engine... Done!")
