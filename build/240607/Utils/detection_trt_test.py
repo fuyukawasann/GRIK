@@ -35,7 +35,7 @@ def do_inference(context, bindings, inputs, outputs, stream):
 
 
 def main():
-    engine_path = "../Weights/yolov7_gs.trt"
+    engine_path = "../Weights/best_tiny_400_16.trt"
     engine = load_engine(engine_path)
     context = engine.create_execution_context()
     inputs, outputs, bindings, stream = allocate_buffers(engine)
