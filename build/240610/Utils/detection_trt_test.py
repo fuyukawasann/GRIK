@@ -65,7 +65,7 @@ class detection_trt:
     def inference(self, input_image):
         #image = input_image.transpose(0, 3, 1, 2)
         #image = np.ascontiguousarray(image)
-        cuda.memcpy_htod(self.inputs[0]["allocation"], image)
+        cuda.memcpy_htod(self.inputs[0]["allocation"], input_image)
         self.context.execute_v2(self.allocations)
         for o in range(len(self.outputs)):
             cuda.memcpy_dtoh(self.outputs[o]["host_allocation"], self.outputs[o]["allocation"])
