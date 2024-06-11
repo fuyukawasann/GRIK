@@ -1,4 +1,4 @@
-import detection_trt_test as dtt
+from detection_trt_test import detection_trt as dtt
 
 path = "../Weights/best_tiny_400_16.trt"
 
