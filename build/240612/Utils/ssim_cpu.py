@@ -18,11 +18,7 @@ from PIL import Image
 from datetime import datetime
 import shutil
 import time
-try:
-    import cv2
-except:
-    os.system('pip install opencv-python')
-    import cv2
+import cv2
 try:
     from skimage.metrics import structural_similarity as ssim
 except:
