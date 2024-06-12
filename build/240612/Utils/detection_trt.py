@@ -16,19 +16,19 @@ from collections import OrderedDict, namedtuple
 
 class detection_ps_trt:
     def __init__(self, img_path, result_name):
-	self.img_path = img_path
+        self.img_path = img_path
         self.result_name = result_name
 	
     def letterbox(im, new_shape=(640, 640), color=(114,114,114), auto=True, scaleup=True, stride = 32):
 	# Resize and pad image while meeting stride-multiple constraints
         shape = im.shape[:2]  # current shape [height, width]
-    	if isinstance(new_shape, int):
-	    new_shape = (new_shape, new_shape)
+        if isinstance(new_shape, int):
+        	new_shape = (new_shape, new_shape)
 
         # Scale ratio (new / old)
-        r = min(new_shape[0] / shape[0], new_shape[1] / shape[1])
+        	r = min(new_shape[0] / shape[0], new_shape[1] / shape[1])
         if not scaleup:  # only scale down, do not scale up (for better val mAP)
-	    r = min(r, 1.0)
+	    	r = min(r, 1.0)
 
         # Compute padding
         new_unpad = int(round(shape[1] * r)), int(round(shape[0] * r))
