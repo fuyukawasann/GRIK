@@ -108,3 +108,6 @@ for box, score, cl in zip(boxes, scores, classes):
     name += ' ' + str(round(float(score), 3))
     cv2.rectangle(img,box[:2].tolist(), box[2:].tolist(),color,2)
     cv2.putText(img,name,(int(box[0]),int(box[1])-2),cv2.FONT_HERSHEY_SIMPLEX,0.75,color,thickness=2)
+
+### Check the result
+cv2.imwrite('Result.jpg',img)
