@@ -5,7 +5,7 @@ from Utils.ssim_gpu import ssim_gpu as scg
 
 res_name = 'Testerer'
 
-os.system('gdown --id "15WrOYg9Klmt90WYPce5qsXKug4QwgfDC"')
+os.system('gdown —id "1lb49qaM—C__1XthD2hO5PpXeLrC5Im5"')
 print("GDOWN SUCCESS")
 
 video_path = f'Result/{res_name}/Video'

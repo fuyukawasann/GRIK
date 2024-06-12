@@ -27,7 +27,15 @@ import cv2
 import numpy as np
 import pycuda.autoinit
 import pycuda.driver as cuda
-import pycuda.gpuarray as gpuarray
+try:
+    import pycuda.gpuarray as gpuarray
+except SyntaxError as e:
+    if "future feature annotations is not defined" in str(e):
+        # 타입 힌팅 기능이 활성화되어 있는 경우 비활성화
+        from __future__ import annotations
+        import pycuda.gpuarray as gpuarray
+    else:
+        raise e
 from pycuda.compiler import SourceModule
 
 ## define cuda kernel
