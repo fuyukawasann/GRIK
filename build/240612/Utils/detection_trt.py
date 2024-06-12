@@ -79,7 +79,8 @@ class detection_ps_trt:
         # LOAD ENGINE
         print("Load Engine...")
         time.sleep(1)
-        w = 'Weights/best_tiny_400_16.trt'
+        #w = 'Weights/best_tiny_400_16.trt'
+        w = 'Weights/best.trt'
         self.device = torch.device('cuda:0')
         print("Load Engine... SUCCESS")
         time.sleep(1)
