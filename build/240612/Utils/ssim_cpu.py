@@ -36,7 +36,7 @@ class ssim_cpu:
         self.video_path = video_path
         self.res_name = res_name
     
-    def SSIMprocessor(self, first, second, thisTurn, iter, output_path):
+    def SSIMprocessor(self, first, second, thisTurn, iterator):
         ## Filtered Gray Scale
         grayA = cv2.cvtColor(first, cv2.COLOR_BGR2GRAY)
         grayB = cv2.cvtColor(second, cv2.COLOR_BGR2GRAY)
@@ -47,16 +47,16 @@ class ssim_cpu:
 
         ## If score is greater than 0.87, then delete Primary
         if thisTurn == 1:
-            cv2.imwrite(f'{output_path}/original/{self.res_name}_{iter}.jpg', first)
-            print(f'#{thisTurn - 1} Frame Saved -> {iter}_original')
-            return iter
+            cv2.imwrite(f'{self.output_path}/original/{self.res_name}_{iterator}.jpg', first)
+            print(f'#{thisTurn - 1} Frame Saved -> {iterator}_original')
+            return iterator
         if score < 0.8:
-            cv2.imwrite(f'{output_path}/handwritten/{self.res_name}_{iter}.jpg', first)
-            print(f'#{thisTurn - 1} Frame Saved -> {iter}_handwritten')
-            cv2.imwrite(f'{output_path}/original/{self.res_name}_{iter+1}.jpg', second)
-            print(f'#{thisTurn} Frame Saved -> {iter+1}_original')
-            return iter + 1
-        else: return iter
+            cv2.imwrite(f'{self.output_path}/handwritten/{self.res_name}_{iterator}.jpg', first)
+            print(f'#{thisTurn - 1} Frame Saved -> {iterator}_handwritten')
+            cv2.imwrite(f'{self.output_path}/original/{self.res_name}_{iterator+1}.jpg', second)
+            print(f'#{thisTurn} Frame Saved -> {iterator+1}_original')
+            return iterator + 1
+        else: return iterator
 
     def ssim_cpu_calculation(self):
         # Read the video
@@ -83,13 +83,13 @@ class ssim_cpu:
 
         # Get the output path
         ## Define the output path
-        output_path = f'Result/{self.res_name}/SSIM' # for testing
+        self.output_path = f'Result/{self.res_name}/SSIM' # for testing
         # output_path = 'Images'
         ## Check the output path
-        if not os.path.exists(output_path):
-            os.makedirs(output_path)
-            os.makedirs(f'{output_path}/original')
-            os.makedirs(f'{output_path}/handwritten')
+        if not os.path.exists(self.output_path):
+            os.makedirs(self.output_path)
+            os.makedirs(f'{self.output_path}/original')
+            os.makedirs(f'{self.output_path}/handwritten')
             print("Output path is created successfully!!")
         else: print("Output path is already exist!!")
         time.sleep(1)
@@ -104,6 +104,7 @@ class ssim_cpu:
         iterator = 0
         ## Video Processing
         while(cap.isOpened()):
+            print("Enter Video processing")
             ret, frame = cap.read()
             ### Check the frame is read
             if not ret:
@@ -113,12 +114,12 @@ class ssim_cpu:
                 first = frame
             else:
                 second = frame
-                iterator = ssim_cpu.SSIMprocessor(first, second, frame_counter, iterator, output_path)
+                iterator = ssim_cpu.SSIMprocessor(first, second, frame_counter, iterator, self.output_path)
                 first = second
             frame_counter += 1
             ### Save the last frame
             if int(cap.get(1)) == frame_count:
-                cv2.imwrite(f'{output_path}/handwritten/{self.res_name}_{iterator}.jpg', frame)
+                cv2.imwrite(f'{self.output_path}/handwritten/{self.res_name}_{iterator}.jpg', frame)
                 print(f'#{frame_counter} Frame Saved -> {iterator}_handwritten')
                 break
         
@@ -131,4 +132,4 @@ class ssim_cpu:
         time.sleep(1)
         # Return the output path
         print("SSIM Calculation is completed!!")
-        return output_path, eval_time
+        return self.output_path, eval_time

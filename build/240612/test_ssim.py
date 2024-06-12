@@ -18,4 +18,5 @@ shutil.move('DEMO.mp4', video_path)
 ssim_obj = scc(video_path, res_name)
 save_img_path, ssim_eval_time = ssim_obj.ssim_cpu_calculation()
 
+print(f'Eval Time: {ssim_eval_time}')
 print('Saved Complete')
