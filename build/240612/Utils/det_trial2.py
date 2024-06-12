@@ -107,6 +107,7 @@ scores = scores[0,:nums[0][0]]
 classes = classes[0,:nums[0][0]]
 
 for box,score,cl in zip(boxes,scores,classes):
+    print(round(float(score),3))
     box = postprocess(box,ratio,dwdh).round().int()
     name = names[cl]
     color = colors[name]
