@@ -12,6 +12,7 @@
 ###############################
 
 # import the necessary library
+from __future__ import annotations
 import sys
 import os
 from PIL import Image
@@ -24,18 +25,10 @@ import cv2
 # except:
 #     os.system('pip install scikit-image')
 #     from skimage.metrics import structural_similarity as ssim
-from __future__ import annotations
 import numpy as np
 import pycuda.autoinit
 import pycuda.driver as cuda
-try:
-    import pycuda.gpuarray as gpuarray
-except SyntaxError as e:
-    if "future feature annotations is not defined" in str(e):
-        # 타입 힌팅 기능이 활성화되어 있는 경우 비활성화
-        import pycuda.gpuarray as gpuarray
-    else:
-        raise e
+import pycuda.gpuarray as gpuarray
 from pycuda.compiler import SourceModule
 
 ## define cuda kernel
