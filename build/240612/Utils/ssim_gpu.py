@@ -38,7 +38,7 @@ import pycuda.driver as cuda
 import pycuda.gpuarray as gpuarray
 from pycuda.compiler import SourceModule
 
-# SSIM 커널 코드
+# SSIM kernel
 ssim_kernel = SourceModule("""
 #include <math.h>
 
@@ -49,7 +49,7 @@ __global__ void ssim_kernel(float *img1, float *img2, float *out, int width, int
     if (x < width && y < height) {
         int idx = y * width + x;
 
-        // 이미지 1의 평균, 분산 계산
+        // Mean and Variance
         float mean1 = 0.0f, var1 = 0.0f;
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
@@ -64,7 +64,7 @@ __global__ void ssim_kernel(float *img1, float *img2, float *out, int width, int
         mean1 /= 9.0f;
         var1 = var1 / 9.0f - mean1 * mean1;
 
-        // 이미지 2의 평균, 분산 계산
+        // Calc. Img2's Mean and variance
         float mean2 = 0.0f, var2 = 0.0f;
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
@@ -79,7 +79,7 @@ __global__ void ssim_kernel(float *img1, float *img2, float *out, int width, int
         mean2 /= 9.0f;
         var2 = var2 / 9.0f - mean2 * mean2;
 
-        // SSIM 계산
+        // SSIM 
         float c1 = 0.01f, c2 = 0.03f;
         float ssim = (2 * mean1 * mean2 + c1) * (2 * sqrt(var1 * var2) + c2) /
                     ((mean1 * mean1 + mean2 * mean2 + c1) * (var1 + var2 + c2));
@@ -130,17 +130,17 @@ class ssim_gpu:
         grid_size = (int((width + block_size[0] - 1) / block_size[0]),
                     int((height + block_size[1] - 1) / block_size[1]))
 
-        # GPU 메모리에 이미지 복사
+        # Copy Image to GPU Memory
         img1_gpu = gpuarray.to_gpu(img1)
         img2_gpu = gpuarray.to_gpu(img2)
         out_gpu = gpuarray.empty((height, width), np.float32)
 
-        # SSIM 커널 실행
+        # Run SSIM Kernel
         ssim_func = ssim_kernel.get_function("ssim_kernel")
         ssim_func(img1_gpu, img2_gpu, out_gpu, np.int32(width), np.int32(height),
                 block=block_size, grid=grid_size)
 
-        # GPU 결과를 CPU로 복사
+        # Copy Result to Host Memory
         out = out_gpu.get()
         return out
 
