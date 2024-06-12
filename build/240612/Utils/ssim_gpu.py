@@ -12,7 +12,7 @@
 ###############################
 
 # import the necessary library
-from __future__ import annotations
+#from __future__ import annotations
 import sys
 import os
 from PIL import Image
@@ -32,42 +32,58 @@ import pycuda.gpuarray as gpuarray
 from pycuda.compiler import SourceModule
 
 ## define cuda kernel
-mod = SourceModule("""
+import numpy as np
+import pycuda.autoinit
+import pycuda.driver as cuda
+import pycuda.gpuarray as gpuarray
+from pycuda.compiler import SourceModule
+
+# SSIM 커널 코드
+ssim_kernel = SourceModule("""
 #include <math.h>
 
 __global__ void ssim_kernel(float *img1, float *img2, float *out, int width, int height) {
     int x = blockIdx.x * blockDim.x + threadIdx.x;
     int y = blockIdx.y * blockDim.y + threadIdx.y;
-    
+
     if (x < width && y < height) {
-        int index = y * width + x;
-        
-        float mu1 = 0, mu2 = 0, sigma1 = 0, sigma2 = 0, sigma12 = 0;
-        float C1 = 0.01 * 0.01, C2 = 0.03 * 0.03;
-        
-        // 평균, 분산, 공분산 계산
+        int idx = y * width + x;
+
+        // 이미지 1의 평균, 분산 계산
+        float mean1 = 0.0f, var1 = 0.0f;
         for (int i = -1; i <= 1; i++) {
             for (int j = -1; j <= 1; j++) {
-                int x_n = min(max(x + j, 0), width - 1);
-                int y_n = min(max(y + i, 0), height - 1);
-                int index_n = y_n * width + x_n;
-                
-                mu1 += img1[index_n];
-                mu2 += img2[index_n];
-                sigma1 += img1[index_n] * img1[index_n];
-                sigma2 += img2[index_n] * img2[index_n];
-                sigma12 += img1[index_n] * img2[index_n];
+                int nx = x + i, ny = y + j;
+                if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
+                    float val = img1[ny * width + nx];
+                    mean1 += val;
+                    var1 += val * val;
+                }
             }
         }
-        
-        mu1 /= 9;
-        mu2 /= 9;
-        sigma1 = sqrt(sigma1 / 9 - mu1 * mu1);
-        sigma2 = sqrt(sigma2 / 9 - mu2 * mu2);
-        sigma12 = (sigma12 / 9) - mu1 * mu2;
-        
+        mean1 /= 9.0f;
+        var1 = var1 / 9.0f - mean1 * mean1;
+
+        // 이미지 2의 평균, 분산 계산
+        float mean2 = 0.0f, var2 = 0.0f;
+        for (int i = -1; i <= 1; i++) {
+            for (int j = -1; j <= 1; j++) {
+                int nx = x + i, ny = y + j;
+                if (nx >= 0 && nx < width && ny >= 0 && ny < height) {
+                    float val = img2[ny * width + nx];
+                    mean2 += val;
+                    var2 += val * val;
+                }
+            }
+        }
+        mean2 /= 9.0f;
+        var2 = var2 / 9.0f - mean2 * mean2;
+
         // SSIM 계산
-        out[index] = (2 * mu1 * mu2 + C1) * (2 * sigma12 + C2) / ((mu1 * mu1 + mu2 * mu2 + C1) * (sigma1 * sigma1 + sigma2 * sigma2 + C2));
+        float c1 = 0.01f, c2 = 0.03f;
+        float ssim = (2 * mean1 * mean2 + c1) * (2 * sqrt(var1 * var2) + c2) /
+                    ((mean1 * mean1 + mean2 * mean2 + c1) * (var1 + var2 + c2));
+        out[idx] = ssim;
     }
 }
 """)
@@ -106,25 +122,27 @@ class ssim_gpu:
         else: return iterator
         
     def compute_ssim(self, img1, img2):
-        # GPU 메모리에 이미지 데이터 복사
-        img1_gpu = gpuarray.to_gpu(img1.astype(np.float32))
-        img2_gpu = gpuarray.to_gpu(img2.astype(np.float32))
-        
-        # 출력 배열 생성
-        out_gpu = gpuarray.empty_like(img1_gpu)
-        
-        # CUDA 커널 실행
+        assert img1.shape == img2.shape, "Different Image Size."
+        assert img1.dtype == np.float32 and img2.dtype == np.float32, "Not a float32."
+
+        height, width = img1.shape
         block_size = (16, 16)
-        grid_size = (
-            (img1.shape[1] + block_size[0] - 1) // block_size[0],
-            (img1.shape[0] + block_size[1] - 1) // block_size[1]
-        )
-        ssim_kernel = mod.get_function("ssim_kernel")
-        ssim_kernel(img1_gpu, img2_gpu, out_gpu, np.int32(img1.shape[1]), np.int32(img1.shape[0]), block=block_size, grid=grid_size)
-        
-        # GPU 메모리에서 SSIM 값 가져오기
-        ssim = out_gpu.get()
-        return ssim
+        grid_size = (int((width + block_size[0] - 1) / block_size[0]),
+                    int((height + block_size[1] - 1) / block_size[1]))
+
+        # GPU 메모리에 이미지 복사
+        img1_gpu = gpuarray.to_gpu(img1)
+        img2_gpu = gpuarray.to_gpu(img2)
+        out_gpu = gpuarray.empty((height, width), np.float32)
+
+        # SSIM 커널 실행
+        ssim_func = ssim_kernel.get_function("ssim_kernel")
+        ssim_func(img1_gpu, img2_gpu, out_gpu, np.int32(width), np.int32(height),
+                block=block_size, grid=grid_size)
+
+        # GPU 결과를 CPU로 복사
+        out = out_gpu.get()
+        return out
 
     def ssim_gpu_calculation(self):
         # Read the video
