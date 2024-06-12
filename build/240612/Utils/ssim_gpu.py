@@ -26,9 +26,9 @@ import cv2
 #     os.system('pip install scikit-image')
 #     from skimage.metrics import structural_similarity as ssim
 import numpy as np
-import pycuda.autoinit
-import pycuda.driver as cuda
-import pycuda.gpuarray as gpuarray
+#import pycuda.autoinit
+#import pycuda.driver as cuda
+#import pycuda.gpuarray as gpuarray
 # from pycuda.compiler import SourceModule
 import ctypes
 
@@ -37,8 +37,8 @@ class ssim_gpu:
         # important!! -> input must be the path of the video file
         self.video_path = video_path
         self.res_name = res_name
-        os.system('nvcc -shared -o ssim_gpu.so ssim_gpu.cpp')
-        self.ssim_gpu = ctypes.CDLL('./ssim_gpu.so').ssim_gpu
+        os.system('nvcc -shared -o ./Utils/ssim.so ./Utils/ssim.cu')
+        self.ssim_gpu = ctypes.CDLL('./Utils/ssim.so').ssim_gpu
         self.ssim_gpu.argtypes = [ctypes.POINTER(ctypes.c_float), ctypes.POINTER(ctypes.c_float), ctypes.POINTER(ctypes.c_float), ctypes.c_int, ctypes.c_int]
 
     def ssim(self, img1, img2):
