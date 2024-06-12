@@ -50,7 +50,7 @@ class ssim_cpu:
             cv2.imwrite(f'{output_path}/original/{self.res_name}_{iter}.jpg', first)
             print(f'#{thisTurn - 1} Frame Saved -> {iter}_original')
             return iter
-        if score < 0.87:
+        if score < 0.8:
             cv2.imwrite(f'{output_path}/handwritten/{self.res_name}_{iter}.jpg', first)
             print(f'#{thisTurn - 1} Frame Saved -> {iter}_handwritten')
             cv2.imwrite(f'{output_path}/original/{self.res_name}_{iter+1}.jpg', second)
@@ -88,6 +88,8 @@ class ssim_cpu:
         ## Check the output path
         if not os.path.exists(output_path):
             os.makedirs(output_path)
+            os.makedirs(f'{output_path}/original')
+            os.makedirs(f'{output_path}/handwritten')
             print("Output path is created successfully!!")
         else: print("Output path is already exist!!")
         time.sleep(1)
