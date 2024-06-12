@@ -5,8 +5,8 @@
 ##########################################
 
 ########## Change Log ##########
-# Jun 11, 2024 (KST)
-# Add gdown to download DEMO.mp4
+# Jun 12, 2024 (KST)
+# Delete ssim_gpu.py because we failed to build the module
 ###############################
 
 ## import the necessary library
@@ -20,9 +20,9 @@ import shutil
 
 ## import my own module
 from Utils.ssim_cpu import ssim_cpu as scc
-from Utils.ssim_gpu import ssim_gpu as scg
 from Utils.extract import extractor as etr
-from Utils.detection import detection_ps as dps
+from Utils.detection_trt import detection_ps_trt as dtrt
+#from Utils.detection import detection_ps as dps
 from Utils.makePDF import makePDF as mpdf
 
 
@@ -36,6 +36,7 @@ if __name__ == '__main__':
     
     ## 0. Get Saved Name
     print("Get the name of the result...")
+    time.sleep(1)
     res_name = input("Enter the name of the result: ")
     ### Add the current time to the name
     res_name = f'{res_name}_{datetime.now().strftime("%Y%m%d%H%M%S")}'
@@ -47,6 +48,7 @@ if __name__ == '__main__':
 
     ## 0-1. Download Video.mp4
     print("Download video and move to correct directory...")
+    time.sleep(1)
     ### Download at GRIK/build/200000
     os.system('gdown --id "15WrOYg9Klmt90WYPce5qsXKug4QwgfDC"')
     ### Make Directory
@@ -57,38 +59,21 @@ if __name__ == '__main__':
     ### Move video
     shutil.move('DEMO.mp4', video_path)
     print("Donwload video and move to correct directory... SUCCESS")
+    time.sleep(1)
 
     
     ## 1. SSIM - Mark the best frame
     ### Inform the user
-    print("SSIM Part!!")
-    time.sleep(1) # wait for 1 seconds
-    ### USE Different module depending on the platform
-    if(torch.cuda.is_available()):
-        # Use GPU version of the SSIM module
-        print("CUDA is available!!")
-        time.sleep(1) # wait for 1 seconds
-        print("Use the CUDA version of the SSIM module!!")
-        time.sleep(1)
-        #### Input the path of the video file
-        print("Current Directory: ", os.getcwd())
-        video_path = input("Enter the path of the video file: ")
-        ssim_obj = scg(video_path, res_name)
-        save_img_path, ssim_eval_time = ssim_obj.ssim_gpu_calculation()
-        print(f'Saved Image Path: {save_img_path}')
-        print('Saved Complete')
-    else:
-        print("CUDA is not available!!")
-        time.sleep(1) # wait for 1 seconds
-        print("Use the CPU version of the SSIM module!!")
-        time.sleep(1)
-        #### Input the path of the video file
-        print("Current Directory: ", os.getcwd())
-        video_path = input("Enter the path of the video file: ")
-        ssim_obj = scc(video_path, res_name)
-        save_img_path, ssim_eval_time = ssim_obj.ssim_cpu_calculation()
-        print(f'Saved Image Path: {save_img_path}')
-        print('Saved Complete')
+    print("SSIM Part...")
+    time.sleep(1)
+    #### Input the path of the video file
+    print("Current Directory: ", os.getcwd())
+    #video_path = input("Enter the path of the video file: ")
+    ssim_obj = scc(video_path, res_name)
+    save_img_path, ssim_eval_time = ssim_obj.ssim_cpu_calculation()
+    print(f'Saved Image Path: {save_img_path}')
+    print('SSIM Part... SUCCESS')
+    time.sleep(1)
 
     ## 2. Object Detection - Detect the handwritten part
     ### Inform the user
@@ -98,8 +83,8 @@ if __name__ == '__main__':
     print("Test detection module!!")
     time.sleep(1) # wait for 1 seconds
     print(f'Current Directory: {os.getcwd()}')
-    detection_obj = dps(save_img_path, res_name) # After, you need to change 'Images' -> Real Image directory
-    ob_result_path, ob_eval_time = detection_obj.detection_panseo()
+    detection_obj = dtrt(save_img_path, res_name) # After, you need to change 'Images' -> Real Image directory
+    ob_result_path, ob_eval_time = detection_obj.detection_panseo_trt()
     print(f'Result path: {ob_result_path}')
     print("Object Detection Part... SUCCESS")
     time.sleep(1) # wait for 1 seconds

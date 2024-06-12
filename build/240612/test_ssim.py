@@ -3,8 +3,7 @@ import shutil
 from datetime import datetime
 from Utils.ssim_cpu import ssim_cpu as scc
 
-res_name = 'Tester'
-res_name = f'{res_name}_{datetime.now().strftime("%Y%m%d%H%M%S")}'
+res_name = 'Testerer'
 
 os.system('gdown --id "15WrOYg9Klmt90WYPce5qsXKug4QwgfDC"')
 print("GDOWN SUCCESS")
@@ -19,4 +18,5 @@ ssim_obj = scc(video_path, res_name)
 save_img_path, ssim_eval_time = ssim_obj.ssim_cpu_calculation()
 
 print(f'Eval Time: {ssim_eval_time}')
+print(f'Saved Path: {save_img_path}')
 print('Saved Complete')
