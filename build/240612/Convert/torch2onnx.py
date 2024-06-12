@@ -34,8 +34,8 @@ print("Downloading YOLOv7 and valid weight file...")
 os.system("git clone https://github.com/WongKinYiu/yolov7")
 os.chdir("yolov7")
 os.listdir(os.getcwd())
-os.system("cp ../../Weights/best_tiny_400_16.pt .")
-os.system("python3 detect.py --weights ./best_tiny_400_16.pt --conf 0.25 --img-size 640 --source ../../test05.jpg")
+os.system("cp ../../Weights/best.pt .")
+os.system("python3 detect.py --weights ./best.pt --conf 0.25 --img-size 640 --source ../../test05.jpg")
 from PIL import Image
 Image.open("runs/detect/exp/test05.jpg")
 print("Download complete.")
@@ -43,11 +43,11 @@ time.sleep(1)
 
 # Export ONNX model
 print("Exporting ONNX model...")
-os.system("python3 export.py --weights ./best_tiny_400_16.pt --grid --end2end --simplify --topk-all 100 --iou-thres 0.65 --conf-thres 0.35 --img-size 640 640")
+os.system("python3 export.py --weights ./best.pt --grid --end2end --simplify --topk-all 100 --iou-thres 0.65 --conf-thres 0.35 --img-size 640 640")
 os.listdir(os.getcwd())
 print("Export complete.")
 time.sleep(1)
 
 # Save ONNX File at Weight Folder
-os.system("cp ./best_tiny_400_16.onnx ../../Weights")
+os.system("cp ./best.onnx ../../Weights")
 os.listdir("../../Weights")
