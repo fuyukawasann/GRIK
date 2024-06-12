@@ -7,12 +7,11 @@
 ##########################################
 
 ########## Change Log ##########
-# Jun 06, 2024 (KST)
-# Add the code that comparing running time of each sections
+# Jun 13, 2024 (KST)
+# Using OpenCV to acclelerate the SSIM calculation
 ###############################
 
 # import the necessary library
-#from __future__ import annotations
 import sys
 import os
 from PIL import Image
@@ -20,54 +19,25 @@ from datetime import datetime
 import shutil
 import time
 import cv2
-# try:
-#     from skimage.metrics import structural_similarity as ssim
-# except:
-#     os.system('pip install scikit-image')
-#     from skimage.metrics import structural_similarity as ssim
 import numpy as np
-#import pycuda.autoinit
-#import pycuda.driver as cuda
-#import pycuda.gpuarray as gpuarray
-# from pycuda.compiler import SourceModule
-import ctypes
 
 class ssim_gpu:
     def __init__(self, video_path, res_name):
         # important!! -> input must be the path of the video file
         self.video_path = video_path
         self.res_name = res_name
-        os.system('nvcc -shared -o ./Utils/ssim.so ./Utils/ssim.cu')
-        self.ssim_gpu = ctypes.CDLL('./Utils/ssim.so').ssim_gpu
-        self.ssim_gpu.argtypes = [ctypes.POINTER(ctypes.c_float), ctypes.POINTER(ctypes.c_float), ctypes.POINTER(ctypes.c_float), ctypes.c_int, ctypes.c_int]
-
-    def ssim(self, img1, img2):
-        assert img1.shape == img2.shape, "Different Image Size."
-        assert img1.dtype == np.float32 and img2.dtype == np.float32, "Image Type is not a float32."
-
-        height, width = img1.shape
-        out = np.empty((height, width), dtype=np.float32)
-
-        img1_ptr = img1.ctypes.data_as(ctypes.POINTER(ctypes.c_float))
-        img2_ptr = img2.ctypes.data_as(ctypes.POINTER(ctypes.c_float))
-        out_ptr = out.ctypes.data_as(ctypes.POINTER(ctypes.c_float))
-
-        self.ssim_gpu(img1_ptr, img2_ptr, out_ptr, width, height)
-
-        return out
+        cv2.setUseOptimized(True)
+        cv2.setNumThreads(0)
 
     def SSIMprocessor(self, first, second, thisTurn, iterator):
         ## Filtered Gray Scale
-        # print(f'Processing Frame #{thisTurn}...')
-        # print(f'Output Path: {self.output_path}')
         grayA = cv2.cvtColor(first, cv2.COLOR_BGR2GRAY)
         grayB = cv2.cvtColor(second, cv2.COLOR_BGR2GRAY)
 
         ## Saving Score
-        # score = self.compute_ssim(grayA, grayB)
-        score = self.ssim(grayA.astype(np.float32), grayB.astype(np.float32))
-        # (score, diff) = ssim(grayA, grayB, full=True)
-        #diff = (diff * 255).astype("uint8")
+        # Required to install opencv-contrib-python
+        score = cv2.quality.QualitySSIM_compute(grayA, grayB)[0]
+        score = score[0]
 
         ## If score is greater than 0.87, then delete Primary
         if thisTurn == self.frame_rate * 2:
@@ -81,29 +51,6 @@ class ssim_gpu:
             print(f'#{thisTurn} Frame Saved -> {iterator+1}_original')
             return iterator + 1
         else: return iterator
-        
-    # def compute_ssim(self, img1, img2):
-    #     assert img1.shape == img2.shape, "Different Image Size."
-    #     assert img1.dtype == np.float32 and img2.dtype == np.float32, "Not a float32."
-
-    #     height, width = img1.shape
-    #     block_size = (16, 16)
-    #     grid_size = (int((width + block_size[0] - 1) / block_size[0]),
-    #                 int((height + block_size[1] - 1) / block_size[1]))
-
-    #     # Copy Image to GPU Memory
-    #     img1_gpu = gpuarray.to_gpu(img1)
-    #     img2_gpu = gpuarray.to_gpu(img2)
-    #     out_gpu = gpuarray.empty((height, width), np.float32)
-
-    #     # Run SSIM Kernel
-    #     ssim_func = ssim_kernel.get_function("ssim_kernel")
-    #     ssim_func(img1_gpu, img2_gpu, out_gpu, np.int32(width), np.int32(height),
-    #             block=block_size, grid=grid_size)
-
-    #     # Copy Result to Host Memory
-    #     out = out_gpu.get()
-    #     return out
 
     def ssim_gpu_calculation(self):
         # Read the video

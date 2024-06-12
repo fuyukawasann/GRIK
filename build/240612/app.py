@@ -20,6 +20,7 @@ import shutil
 
 ## import my own module
 from Utils.ssim_cpu import ssim_cpu as scc
+from Utils.ssim_gpu import ssim_gpu as scg
 from Utils.extract import extractor as etr
 from Utils.detection_trt import detection_ps_trt as dtrt
 #from Utils.detection import detection_ps as dps
@@ -71,8 +72,17 @@ if __name__ == '__main__':
     #### Input the path of the video file
     print("Current Directory: ", os.getcwd())
     #video_path = input("Enter the path of the video file: ")
-    ssim_obj = scc(video_path, res_name)
-    save_img_path, ssim_eval_time = ssim_obj.ssim_cpu_calculation()
+    ## If cuda available -> use GPU
+    if torch.cuda.is_available():
+        print("CUDA mode..")
+        time.sleep(1)
+        ssim_obj = scg(video_path, res_name)
+        save_img_path, ssim_eval_time = ssim_obj.ssim_gpu_calculation()
+    else:
+        print("CPU mode..")
+        time.sleep(1)
+        ssim_obj = scc(video_path, res_name)
+        save_img_path, ssim_eval_time = ssim_obj.ssim_cpu_calculation()
     print(f'Saved Image Path: {save_img_path}')
     print('SSIM Part... SUCCESS')
     time.sleep(1)
