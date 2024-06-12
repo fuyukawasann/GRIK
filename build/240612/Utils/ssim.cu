@@ -48,9 +48,12 @@ __global__ void ssim_kernel(const float* img1, const float* img2, float* out, in
     }
 }
 
-extern "C" __global__ void ssim_gpu(const float* img1, const float* img2, float* out, int width, int height) {
-    dim3 block_size(16, 16);
-    dim3 grid_size((width + block_size.x - 1) / block_size.x, (height + block_size.y - 1) / block_size.y);
+extern "C" {
+    void ssim_gpu(const float* img1, const float* img2, float* out, int width, int height) {
+        dim3 block_size(16, 16);
+        dim3 grid_size((width + block_size.x - 1) / block_size.x, (height + block_size.y - 1) / block_size.y);
 
-    ssim_kernel<<<grid_size, block_size>>>(img1, img2, out, width, height);
+        ssim_kernel<<<grid_size, block_size>>>(img1, img2, out, width, height);
+        cudaDeviceSynchronize();
+    }
 }
