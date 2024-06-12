@@ -50,7 +50,9 @@ if __name__ == '__main__':
     print("Download video and move to correct directory...")
     time.sleep(1)
     ### Download at GRIK/build/200000
-    os.system('gdown —id "1lb49qaM—C__1XthD2hO5PpXeLrC5Im5"')
+    # 15WrOYg9Klmt90WYPce5qsXKug4QwgfDC -> DEMO
+    # 1lb49qaM--C__1XthD2hO5PpXeLrC5Im5 -> DEMO2
+    os.system('gdown https://drive.google.com/uc?id=15WrOYg9Klmt90WYPce5qsXKug4QwgfDC')
     ### Make Directory
     video_path = f'Result/{res_name}/Video'
     if not os.path.exists(video_path):
