@@ -25,7 +25,7 @@ At this point, we named "GRIK" because I like GRIK Yogurt :D
 ```
 OpenCV == 4.6.0 with CUDA Acceleration
 numpy == 1.9.5
-Cython < 3.0 **Over 3.0, not support python 3.6**
+Cython < 3.0 -> Over 3.0, not support python 3.6
 scikit-image
 PIL
 reportlab
