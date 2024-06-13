@@ -188,7 +188,7 @@ def test_model(sel_model):
             os.system("python detect.py --weights ./runs/train/yolov7-custom/weights/best.pt --conf 0.25 --img-size 640 --source ../test05.jpg")
     else:
         print("Testing the yolov7-tiny model...")
-        if(torch.backends.mps.is_available()):
+        if(torch.cuda.is_available()):
             os.system("python detect.py --weights ./runs/train/yolov7-tiny-custom/weights/best.pt --device 0 --conf 0.25 --img-size 640 --source ../test05.jpg")
         else:
             os.system("python detect.py --weights ./runs/train/yolov7-tiny-custom/weights/best.pt --conf 0.25 --img-size 640 --source ../test05.jpg")

@@ -53,14 +53,15 @@ if __name__ == '__main__':
     ### Download at GRIK/build/200000
     # 15WrOYg9Klmt90WYPce5qsXKug4QwgfDC -> DEMO
     # 1lb49qaM--C__1XthD2hO5PpXeLrC5Im5 -> DEMO2
-    os.system('gdown https://drive.google.com/uc?id=15WrOYg9Klmt90WYPce5qsXKug4QwgfDC')
+    # 1u4JiTebHVWAIEw_nL-mjsuwW9kBsL_uh -> DEMO3
+    os.system('gdown https://drive.google.com/uc?id=1u4JiTebHVWAIEw_nL-mjsuwW9kBsL_uh')
     ### Make Directory
     video_path = f'Result/{res_name}/Video'
     if not os.path.exists(video_path):
         os.makedirs(video_path)
     video_path = f'{video_path}/DEMO.mp4'
     ### Move video
-    shutil.move('DEMO.mp4', video_path)
+    shutil.move('DEMO3.mp4', video_path)
     print("Donwload video and move to correct directory... SUCCESS")
     time.sleep(1)
 
