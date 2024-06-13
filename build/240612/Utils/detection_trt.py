@@ -163,7 +163,7 @@ class detection_ps_trt:
             boxes = boxes[0,:nums[0][0]]
             scores = scores[0,:nums[0][0]]
             classes = classes[0,:nums[0][0]]
-            
+
             iterate = 0
             ### postprocess
             for box,score,cl in zip(boxes,scores,classes):
@@ -176,10 +176,10 @@ class detection_ps_trt:
                 name += ' ' + str(round(float(score),3))
                 #### Save part of the original image
                 new_ori_img = original_img[box[1]:box[3], box[0]:box[2]]
-                cv2.imwrite(f'{save_img_path}/original/{img_name}_detect_{iterate}.jpg', new_ori_img)
+                #cv2.imwrite(f'{save_img_path}/original/{img_name}_detect_{iterate}.jpg', new_ori_img)
                 #### Save part of the handwritten image
                 new_hand_img = handwritten_img[box[1]:box[3], box[0]:box[2]]
-                cv2.imwrite(f'{save_img_path}/handwritten/{img_name}_detect_{iterate}.jpg', new_hand_img)
+                #cv2.imwrite(f'{save_img_path}/handwritten/{img_name}_detect_{iterate}.jpg', new_hand_img)
                 #### Increase Iterator
                 iterate = iterate + 1
                 #### Draw the rectangle and text
