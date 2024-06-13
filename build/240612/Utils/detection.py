@@ -113,6 +113,7 @@ class detection_ps:
 			img_name = img.split('.')[0]
 			original_img = cv2.imread(f'{ori_img_path}/{img}')
 			handwritten_img = cv2.imread(f'{hw_img_path}/{img}')
+                        yolo_img = cv2.imread(f'{hw_img_path}/{img}')
 			result_temp = pretrained_model(f'{hw_img_path}/{img}')
 			xyxys = result_temp.pandas().xyxy[0].values # When test delete '.values'
 			# print(xyxys)
@@ -133,11 +134,11 @@ class detection_ps:
 
 				iterate = iterate + 1
 				# print(x, type(x))
-				cv2.rectangle(handwritten_img, (x, y), (x2, x2), (0,0,255), 2)
-				cv2.putText(handwritten_img, cls_name, (x, y-5), cv2.FONT_HERSHEY_SIMPLEX, 2, (0,0,255), 2)
-				cv2.putText(handwritten_img, str(round(confi, 2)), (x, y-40), cv2.FONT_HERSHEY_SIMPLEX, 2, (0,0,255), 2)
+				cv2.rectangle(yolo_img, (x, y), (x2, x2), (0,0,255), 2)
+				cv2.putText(yolo_img, cls_name, (x, y-5), cv2.FONT_HERSHEY_SIMPLEX, 2, (0,0,255), 2)
+				cv2.putText(yolo_img, str(round(confi, 2)), (x, y-40), cv2.FONT_HERSHEY_SIMPLEX, 2, (0,0,255), 2)
     
-			cv2.imwrite(f'{save_img_path}/{img_name}_detect.jpg', handwritten_img)
+			cv2.imwrite(f'{save_img_path}/yolo/{img_name}_detect.jpg', yolo_img)
 
 		## Check the end time
 		end_time = time.time()

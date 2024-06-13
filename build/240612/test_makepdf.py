@@ -1,9 +1,8 @@
 from Utils.makePDF import makePDF as mpdf
 
-
-SSIM_path = 'Result/Test/SSIM'
-extract_path = 'Result/Test/Extracted'
-result_name = 'Test'
+result_name = 'Test_200_16_ver3_20240613182305'
+SSIM_path = f'Result/{result_name}/SSIM'
+extract_path = f'Result/{result_name}/Extracted'
 this_object = mpdf(SSIM_path, extract_path, result_name)
 this_time = this_object.make_pdf()
 

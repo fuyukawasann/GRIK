@@ -147,6 +147,7 @@ class detection_ps_trt:
             img_name = img.split('.')[0]
             original_img = cv2.imread(f'{ori_img_path}/{img}')
             handwritten_img = cv2.imread(f'{hw_img_path}/{img}')
+            yolo_img = cv2.imread(f'{hw_img_path}/{img}')
             ### preprocess
             result_img, ratio, dwdh = self.preprocess(handwritten_img)
             ### Inference
@@ -182,10 +183,10 @@ class detection_ps_trt:
                 #### Increase Iterator
                 iterate = iterate + 1
                 #### Draw the rectangle and text
-                cv2.rectangle(handwritten_img,box[:2].tolist(),box[2:].tolist(),color,2)
-                cv2.putText(handwritten_img,name,(int(box[0]), int(box[1]) - 2),cv2.FONT_HERSHEY_SIMPLEX,0.75,color,thickness=2)
+                cv2.rectangle(yolo_img,box[:2].tolist(),box[2:].tolist(),color,2)
+                cv2.putText(yolo_img,name,(int(box[0]), int(box[1]) - 2),cv2.FONT_HERSHEY_SIMPLEX,0.75,color,thickness=2)
             ### Save the result image
-            cv2.imwrite(f'{save_img_path}/yolo/{img_name}_detect.jpg', handwritten_img)
+            cv2.imwrite(f'{save_img_path}/yolo/{img_name}_detect.jpg', yolo_img)
         
         ## Set end time
         end_time = time.time()

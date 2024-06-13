@@ -152,18 +152,22 @@ if __name__ == '__main__':
     print("Print Out the Running Time... SUCCESS")
     time.sleep(1) # wait for 1 seconds
     
-    ## 6. Delete YOLOv7
+    ## 6. Delete YOLOv7 (When SSIM-CPU Used)
     ### Inform the user
     print("Delete YOLOv7 repository...")
     time.sleep(1) # wait for 1 seconds
     ### Delete the repository
-    my_plat = platform.system()
-    if my_plat == 'Windows':
-        os.system('rmdir /s yolov7')
+    if not torch.cuda.is_available():
+        my_plat = platform.system()
+        if my_plat == 'Windows':
+            os.system('rmdir /s yolov7')
+        else:
+            os.system('rm -rf yolov7')
+        ### Finish
+        print("Delete YOLOv7 repository... SUCCESS")
     else:
-        os.system('rm -rf yolov7')
-    ### Finish
-    print("Delete YOLOv7 repository... SUCCESS")
+        print("Don't need to delete YOLOv7 repository... Don't Exist")
+        print("Delete YOLOv7 repository.. PASS")
     time.sleep(1) # wait for 1 seconds
     
     ## EOF

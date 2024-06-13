@@ -71,7 +71,7 @@ class makePDF:
             elements.append(Spacer(1, 0.2*inch))
 			
 			# Add Extracted Image
-            extract_img = [f for f in os.listdir(self.extract_path) if f.startswith(f'{self.result_name}_{iter}_detect')]
+            extract_img = [f for f in os.listdir(self.extract_path) if f.startswith(f'{self.result_name}_{iter + 1}_detect')]
             ## Sorted
             extract_img = natsort.natsorted(extract_img)
             for ext_iter in range(len(extract_img)):
