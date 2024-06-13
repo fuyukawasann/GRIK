@@ -174,6 +174,7 @@ class detection_ps_trt:
                 name = names[cl]
                 color = colors[name]
                 name += ' ' + str(round(float(score),3))
+                print(f'box[1]:{box[1]}, box[3]:{box[3]}, box[0]:{box[0]}, box[2]:{box[2]}')
                 #### Save part of the original image
                 new_ori_img = original_img[box[1]:box[3], box[0]:box[2]]
                 #cv2.imwrite(f'{save_img_path}/original/{img_name}_detect_{iterate}.jpg', new_ori_img)
