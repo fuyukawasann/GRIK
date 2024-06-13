@@ -157,8 +157,8 @@ if __name__ == '__main__':
     print("Delete YOLOv7 repository...")
     time.sleep(1) # wait for 1 seconds
     ### Delete the repository
+    my_plat = platform.system()
     if not torch.cuda.is_available():
-        my_plat = platform.system()
         if my_plat == 'Windows':
             os.system('rmdir /s yolov7')
         else:
@@ -170,6 +170,11 @@ if __name__ == '__main__':
         print("Delete YOLOv7 repository.. PASS")
     time.sleep(1) # wait for 1 seconds
     
+    ## 7. Delete Vieo
+    if my_plat == 'Windows':
+        os.system(f'rmdir /s Result/{res_name}/Video')
+    else:
+        os.system(f'rm -rf Result/{res_name}/Video')
     ## EOF
     print("End of the file!!")
   
