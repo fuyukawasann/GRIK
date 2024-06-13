@@ -6,17 +6,17 @@
 
 import os
 import time
-try:
-    from reportlab.lib.pagesizes import A4
-    from reportlab.platypus import SimpleDocTemplate, Image, Paragrah, Spacer, PageBreak
-    from reportlab.lib.units import inch
-    from reportlab.lib.styles import getSampleStyleSheet
-except ImportError:
-    os.system('pip install reportlab')
-    from reportlab.lib.pagesizes import A4
-    from reportlab.platypus import SimpleDocTemplate, Image, Paragraph, Spacer, PageBreak
-    from reportlab.lib.units import inch
-    from reportlab.lib.styles import getSampleStyleSheet
+#try:
+from reportlab.lib.pagesizes import A4
+from reportlab.platypus import SimpleDocTemplate, Image, Paragraph, Spacer, PageBreak
+from reportlab.lib.units import inch
+from reportlab.lib.styles import getSampleStyleSheet
+#except ImportError:
+#    os.system('pip install reportlab')
+#    from reportlab.lib.pagesizes import A4
+#    from reportlab.platypus import SimpleDocTemplate, Image, Paragraph, Spacer, PageBreak
+#    from reportlab.lib.units import inch
+#    from reportlab.lib.styles import getSampleStyleSheet
 import natsort
 from PIL import Image as PILImage
     

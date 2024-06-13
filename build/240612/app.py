@@ -171,10 +171,14 @@ if __name__ == '__main__':
     time.sleep(1) # wait for 1 seconds
     
     ## 7. Delete Vieo
+    print("Delete Video...")
+    time.sleep(1)
     if my_plat == 'Windows':
         os.system(f'rmdir /s Result/{res_name}/Video')
     else:
         os.system(f'rm -rf Result/{res_name}/Video')
+    print("Delete Video... SUCCESS")
+    time.sleep(1)
     ## EOF
     print("End of the file!!")
   

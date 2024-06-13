@@ -19,11 +19,11 @@ from datetime import datetime
 import shutil
 import time
 import cv2
-try:
-    from skimage.metrics import structural_similarity as ssim
-except:
-    os.system('pip install scikit-image')
-    from skimage.metrics import structural_similarity as ssim
+#try:
+from skimage.metrics import structural_similarity as ssim
+#except:
+#    os.system('pip install scikit-image')
+#    from skimage.metrics import structural_similarity as ssim
 
 
 class ssim_cpu:

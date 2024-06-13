@@ -95,7 +95,7 @@ for img in my_list:
 	    ty1 = int((input_size[0] - th) / 2)
 	    ty2 = input_size[0] - th - ty1
 	else:
-	    tw = int(r_h * origin_w)
+	    tw = int(r_h * ori_w)
 	    th = input_size[0]
 	    tx1 = int((input_size[1] - tw) / 2)
 	    tx2 = input_size[i] - tw - tx1
