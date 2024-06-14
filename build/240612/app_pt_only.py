@@ -22,8 +22,8 @@ import shutil
 from Utils.ssim_cpu import ssim_cpu as scc
 from Utils.ssim_gpu import ssim_gpu as scg
 from Utils.extract import extractor as etr
-from Utils.detection_trt import detection_ps_trt as dtrt
-#from Utils.detection import detection_ps as dps
+#from Utils.detection_trt import detection_ps_trt as dtrt
+from Utils.detection import detection_ps as dps
 from Utils.makePDF import makePDF as mpdf
 
 
@@ -96,8 +96,8 @@ if __name__ == '__main__':
     print("Test detection module!!")
     time.sleep(1) # wait for 1 seconds
     print(f'Current Directory: {os.getcwd()}')
-    detection_obj = dtrt(save_img_path, res_name) # After, you need to change 'Images' -> Real Image directory
-    ob_result_path, ob_eval_time = detection_obj.detection_panseo_trt()
+    detection_obj = dps(save_img_path, res_name) # After, you need to change 'Images' -> Real Image directory
+    ob_result_path, ob_eval_time = detection_obj.detection_panseo()
     print(f'Result path: {ob_result_path}')
     print("Object Detection Part... SUCCESS")
     time.sleep(1) # wait for 1 seconds
