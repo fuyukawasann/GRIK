@@ -113,7 +113,7 @@ class detection_ps:
 			img_name = img.split('.')[0]
 			original_img = cv2.imread(f'{ori_img_path}/{img}')
 			handwritten_img = cv2.imread(f'{hw_img_path}/{img}')
-                        yolo_img = cv2.imread(f'{hw_img_path}/{img}')
+			yolo_img = cv2.imread(f'{hw_img_path}/{img}')
 			result_temp = pretrained_model(f'{hw_img_path}/{img}')
 			xyxys = result_temp.pandas().xyxy[0].values # When test delete '.values'
 			# print(xyxys)
