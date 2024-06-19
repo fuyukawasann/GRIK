@@ -35,8 +35,9 @@ Businesses can utilize Lecture Summarizer to create concise training materials f
 
 ## About Our Project
 ### Why this project is named "GRIK"
-We are interested in almost all project code names food as Eclipse, Bread, Honeycomb, etc.
-At this point, we named "GRIK" because I like GRIK Yogurt :D
+We ofthen find that project code names are inspired by food items, such as Eclipse, Bread, and Honeycomb. <br>
+In our case, we named our project "GRIK" because of our fondness for Greek yogurt. <br>
+The name not only reflects our culinary preferences but also pays homage to the rich cultural heritage of Greece.
 ### Dependency
 - Jetson Nano 4GB Dev. Board
 - Python 3.6.9
