@@ -95,7 +95,10 @@ class Imagehash:
                     second = frame
                     second_PIL = Image.fromarray(second)
                     second_hash = imagehash.phash(second_PIL)
+                    inner_start_time = time.time() # Check the time
                     distance = first_hash - second_hash
+                    inner_end_time = time.time() # Check the time
+                    print(f"Imagehash Calculation Time: {inner_end_time - inner_start_time} seconds") # Check the time
                     if(distance >= 10):
                         iterator += 1
                         first_PIL.save(f'{self.output_path}/handwritten/{self.res_name}_{iterator - 1}.jpg')
