@@ -19,7 +19,7 @@ import time
 import cv2
 import imagehash
 
-class imagehash:
+class Imagehash:
     def __init__(self, video_path, res_name):
         # important!! -> input must be the path of the video file
         self.video_path = video_path
@@ -74,7 +74,7 @@ class imagehash:
         
         # Imagehash
         ## Check Start Time
-        print("SSIM Calculation...")
+        print("Imagehash Calculation...")
         start_time = time.time()
         ## Define Frame Counter
         # frame_counter = 0
@@ -99,7 +99,7 @@ class imagehash:
                     if(distance >= 10):
                         iterator += 1
                         first_PIL.save(f'{self.output_path}/handwritten/{self.res_name}_{iterator - 1}.jpg')
-                        print(f'#{cap.get(1)} Frame Saved -> {iterator - 1}_handwritten')
+                        print(f'#{cap.get(1)-1} Frame Saved -> {iterator - 1}_handwritten')
                         second_PIL.save(f'{self.output_path}/original/{self.res_name}_{iterator}.jpg')
                         print(f'#{cap.get(1)} Frame Saved -> {iterator}_original')
                     first_PIL = second_PIL

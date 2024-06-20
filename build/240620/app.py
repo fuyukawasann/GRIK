@@ -19,7 +19,7 @@ import sys
 import shutil
 
 ## import my own module
-from Utils.imagehash import imagehash as ih
+from Utils.Imagehash import Imagehash as ih
 from Utils.extract import extractor as etr
 from Utils.detection_trt import detection_ps_trt as dtrt
 #from Utils.detection import detection_ps as dps
