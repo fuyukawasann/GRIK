@@ -36,8 +36,11 @@ class ssim_gpu:
 
         ## Saving Score
         # Required to install opencv-contrib-python
+        inner_start_time = time.time()
         score = cv2.quality.QualitySSIM_compute(grayA, grayB)[0]
         score = score[0]
+        inner_end_time = time.time()
+        print(f'Inner Eval Time: {inner_end_time - inner_start_time}')
 
         ## If score is greater than 0.87, then delete Primary
         if thisTurn == self.frame_rate * 2:
