@@ -5,8 +5,8 @@
 ##########################################
 
 ########## Change Log ##########
-# Jun 12, 2024 (KST)
-# Delete ssim_gpu.py because we failed to build the module
+# Jun 20, 2024 (KST)
+# Change SSIM to Imagehash
 ###############################
 
 ## import the necessary library
@@ -19,8 +19,7 @@ import sys
 import shutil
 
 ## import my own module
-from Utils.ssim_cpu import ssim_cpu as scc
-from Utils.ssim_gpu import ssim_gpu as scg
+from Utils.Imagehash import Imagehash as ih
 from Utils.extract import extractor as etr
 from Utils.detection_trt import detection_ps_trt as dtrt
 #from Utils.detection import detection_ps as dps
@@ -66,26 +65,16 @@ if __name__ == '__main__':
     time.sleep(1)
 
     
-    ## 1. SSIM - Mark the best frame
+    ## 1. Imagehash
     ### Inform the user
-    print("SSIM Part...")
+    print("Imagehash Part...")
     time.sleep(1)
     #### Input the path of the video file
     print("Current Directory: ", os.getcwd())
-    #video_path = input("Enter the path of the video file: ")
-    ## If cuda available -> use GPU
-    if torch.cuda.is_available():
-        print("CUDA mode..")
-        time.sleep(1)
-        ssim_obj = scg(video_path, res_name)
-        save_img_path, ssim_eval_time = ssim_obj.ssim_gpu_calculation()
-    else:
-        print("CPU mode..")
-        time.sleep(1)
-        ssim_obj = scc(video_path, res_name)
-        save_img_path, ssim_eval_time = ssim_obj.ssim_cpu_calculation()
+    imhs_obj = ih(video_path, res_name)
+    save_img_path, imhs_eval_time = imhs_obj.imagehash_calculation()
     print(f'Saved Image Path: {save_img_path}')
-    print('SSIM Part... SUCCESS')
+    print('Imagehash Part... SUCCESS')
     time.sleep(1)
 
     ## 2. Object Detection - Detect the handwritten part
@@ -138,7 +127,7 @@ if __name__ == '__main__':
     print("=====================================")
     time.sleep(1) # wait for 1 seconds
     ### SSIM
-    print(f'SSIM Running Time: {ssim_eval_time} seconds')
+    print(f'SSIM Running Time: {imhs_eval_time} seconds')
     ### Object Detection
     print(f'Object Detection Running Time: {ob_eval_time} seconds')
     ### Delete Background
@@ -146,7 +135,7 @@ if __name__ == '__main__':
     ### Make PDF File
     print(f'Make PDF File Running Time: {mpdf_eval_time} seconds')
     ### Print Out the Total Running Time
-    total_time = ssim_eval_time + ob_eval_time + etr_eval_time + mpdf_eval_time
+    total_time = imhs_eval_time + ob_eval_time + etr_eval_time + mpdf_eval_time
     print(f'Total Running Time: {total_time} seconds')
     print("=====================================")
     print("Print Out the Running Time... SUCCESS")

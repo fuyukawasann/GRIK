@@ -65,3 +65,4 @@ Step 3. Run `python3 app.py` <br>
 
 ## BUILD History
 - Jun 14, 2024: Object Detection available
+- Jun 20, 2024: Change Similarity Algorithm **Before: SSIM, NOW: imagehash**
