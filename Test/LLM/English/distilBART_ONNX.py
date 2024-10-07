@@ -1,4 +1,4 @@
-from transformers import AutoMdoelForSequenceClassification, AutoTokenizer
+from transformers import AutoModelForSequenceClassification, AutoTokenizer
 from optimum.onnxruntime import ORTModelForSequenceClassification
 
 model_id = "sshleifer/distilbart-cnn-12-6"
