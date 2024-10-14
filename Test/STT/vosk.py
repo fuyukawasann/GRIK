@@ -1,24 +1,32 @@
+import vosk
+import pyaudio
 import wave
-import json
-from vosk import Model, KaldiRecognizer
 
-# Vosk 영어 모델 로드
-model = Model("vosk-model-small-en-us-0.15")
+model = vosk.Model("vosk-model-small-en-us-0.15")
 
-# WAV 파일 로드
-wf = wave.open("your_audio_file.wav", "rb")
 
-# 인식기 생성 (WAV 파일의 샘플링 속도 설정)
-rec = KaldiRecognizer(model, wf.getframerate())
 
-# 음성 인식 실행
-while True:
-    data = wf.readframes(4000)
-    if len(data) == 0:
-        break
-    if rec.AcceptWaveform(data):
-        result = rec.Result()
-        print(json.loads(result))
+wf = wave.open("demo.wav", "rb")
 
-# 마지막 결과 출력
-print(json.loads(rec.FinalResult()))
+
+p = pyaudio.PyAudio()
+
+stream = p.open(format=p.get_format_from_width(wf.getsampwidth()),
+		channels = wf.getnchannels(),
+		rate=wf.getframerate(),
+		input=True,
+		frames_per_buffer=1024)
+
+recognizer = vosk.KaldiRecognizer(model, wf.getframmerate())
+
+data = wf.readframes(1024)
+
+while data:
+    if recognizer.AcceptWaveform(data):
+        print(recognizer.Result())
+    data = wf.readframes(1024)
+
+stream.stop_stream()
+stream.close()
+p.terminate()
+
