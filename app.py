@@ -127,8 +127,8 @@ if __name__ == '__main__':
     print("Print Out the Running Time...")
     print("=====================================")
     time.sleep(1) # wait for 1 seconds
-    ### SSIM
-    print(f'SSIM Running Time: {imhs_eval_time} seconds')
+    ### ImageHash
+    print(f'ImageHash Running Time: {imhs_eval_time} seconds')
     ### Object Detection
     print(f'Object Detection Running Time: {ob_eval_time} seconds')
     ### Delete Background
