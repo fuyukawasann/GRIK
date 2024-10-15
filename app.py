@@ -53,8 +53,8 @@ if __name__ == '__main__':
     # 15WrOYg9Klmt90WYPce5qsXKug4QwgfDC -> DEMO
     # 1lb49qaM--C__1XthD2hO5PpXeLrC5Im5 -> DEMO2
     # 1u4JiTebHVWAIEw_nL-mjsuwW9kBsL_uh -> DEMO3
-    # 1AyxtBXOQTw2Ya2-EOCQ6ZvM9UdeBnqC2-> DEMO(ENG)
-    os.system('gdown https://drive.google.com/uc?id=1AyxtBXOQTw2Ya2-EOCQ6ZvM9UdeBnqC2')
+    # 1rHIBqX3mA-gztt8wu0Wur7cHlzcS8sSE-> DEMO(ENG)
+    os.system('gdown https://drive.google.com/uc?id=1rHIBqX3mA-gztt8wu0Wur7cHlzcS8sSE')
     ### Make Directory
     video_path = f'Result/{res_name}/Video'
     if not os.path.exists(video_path):
