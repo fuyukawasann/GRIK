@@ -166,3 +166,6 @@ There are various metrics for calculating similarity. Among PSNR and SSIM, the S
 ## BUILD History
 - Jun 14, 2024: Object Detection available
 - Jun 20, 2024: Change Similarity Algorithm **Before: SSIM, NOW: imagehash**
+
+## Demo
+You can see our demo video [here](https://drive.google.com/file/d/1F_RACJmRroySb1lgFV0WIAQB-g7R_o2E/view?usp=sharing)
